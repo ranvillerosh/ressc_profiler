@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyA8ksYe5i74XgY1IaPdd4_mZOI0HdZBQ64</string>
+	<key>GCM_SENDER_ID</key>
+	<string>158242454517</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.resscProfiler.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>doh-chd-car-portal-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>doh-chd-car-portal-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:158242454517:ios:3faf2304c5e404bbe67ebc</string>
+</dict>
+</plist>

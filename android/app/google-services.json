@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "158242454517",
+    "project_id": "doh-chd-car-portal-app",
+    "storage_bucket": "doh-chd-car-portal-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158242454517:android:6ec452e8e561873ae67ebc",
+        "android_client_info": {
+          "package_name": "com.example.ressc_profiler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158242454517-7rgs8t47iv67a8ftgc1v9jlpitmobtdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQjjztJOS-vQlLWYQAHL0221Ezph3oPik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158242454517-7rgs8t47iv67a8ftgc1v9jlpitmobtdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
