@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
 
@@ -58,11 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.green,
+            color: Colors.greenAccent,
           ),
           constraints: BoxConstraints.expand(
             width: MediaQuery.of(context).size.width/3,
-            height: Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 + 200.0,
+            height: Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 + MediaQuery.of(context).size.height/2,
           ),
           // transform: Matrix4.rotationZ(0.1),
           child: Column(
@@ -70,7 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.of(context).size.height/35
+                ),
                 textAlign: TextAlign.center,
                 softWrap: true,
                 'Welcome to the RESSC Training Directory! Please login to continue.',
@@ -115,13 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       flex: 5,
                       child: FilledButton(
                         onPressed: () {  },
-                        child: Text("Sign up"))
+                        child: Text("Sign Up!"))
                   ),
+                  const Padding(padding: EdgeInsets.all(5)),
                   Expanded(
                       flex: 5,
                       child: FilledButton(
-                          onPressed: () {  },
-                          child: Text("Log in"))
+                          onPressed: () async {  },
+                          child: Text("Login"))
                   )
                 ],
               )
