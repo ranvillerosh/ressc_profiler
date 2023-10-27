@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ressc_profiler/chooser.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,7 +11,16 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  // firebase Auth
+  FirebaseAuth.instance
+      .authStateChanges()
+      .listen((User? user) {
+    if (user == null) {
+      runApp(const MyApp());
+    } else {
+      runApp(const Chooser());
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -20,12 +30,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'RESSC Portal',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'RESSC Training Directory'),
+      home: const MyHomePage(title: 'RESSC Portal'),
     );
   }
 }
@@ -98,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextFormField(
                 obscureText: !_passwordVisibility,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.password),
+                  icon: const Icon(Icons.password),
                   hintText: 'Please enter your password',
                   labelText: 'Password',
                   suffixIcon: IconButton(
@@ -120,14 +130,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       flex: 5,
                       child: FilledButton(
                         onPressed: () {  },
-                        child: Text("Sign Up!"))
+                        child: const Text("Sign Up!"))
                   ),
                   const Padding(padding: EdgeInsets.all(5)),
                   Expanded(
                       flex: 5,
                       child: FilledButton(
                           onPressed: () async {  },
-                          child: Text("Login"))
+                          child: const Text("Login"))
                   )
                 ],
               )
