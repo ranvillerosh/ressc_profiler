@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chooser extends StatelessWidget{
   const Chooser({super.key});
@@ -48,9 +49,26 @@ class _RESSCDirectory extends State<RESSCDirectory> {
                 crossAxisCount: 4,
                 childAspectRatio: 0.5,
               ),
-              itemBuilder: itemBuilder),
+              itemCount: ,
+              itemBuilder: (BuildContext, index) {
+                return Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(18)
+                  ),
+                  child: Text(),
+                );
+              }),
         ),
       ),
     );
   }
 }
+
+class System {
+  String systemName;
+  System (this.systemName);
+}
+
+class _System extends State<RESSCDirectory>
