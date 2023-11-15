@@ -2,35 +2,43 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'Data/system.dart';
+
 class Chooser extends StatelessWidget{
-  const Chooser({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RESSC Directory',
+      title: 'RESSC Portal',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true
       ),
-      home: const RESSCDirectory(title: 'RESSC Directory'),
+      home: const RESSCPortal(title: 'RESSC Portal'),
     );
   }
 }
 
-class RESSCDirectory extends StatefulWidget {
-  const RESSCDirectory({super.key, required this.title});
+class RESSCPortal extends StatefulWidget {
+  const RESSCPortal({super.key, required this.title});
 
   final String title;
 
   @override
-  State<RESSCDirectory> createState() => _RESSCDirectory();
+  State<RESSCPortal> createState() => _RESSCPortal();
 }
 
-class _RESSCDirectory extends State<RESSCDirectory> {
+class _RESSCPortal extends State<RESSCPortal> {
+
+
 
   @override
   Widget build(BuildContext context) {
+    List<System> systemList = [];
+    var directory = new System("Directory");
+    systemList.add(directory);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -47,17 +55,29 @@ class _RESSCDirectory extends State<RESSCDirectory> {
           child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                childAspectRatio: 0.5,
+                childAspectRatio: 1.0,
               ),
-              itemCount: ,
+              itemCount: systemList.length,
               itemBuilder: (BuildContext, index) {
                 return Container(
+                  width: double.infinity,
+                  height: double.infinity,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(18)
                   ),
-                  child: Text(),
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: Text(
+                        systemList[index].systemName,
+                      textWidthBasis: TextWidthBasis.parent,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.height/35
+                      ),
+                    ),
+                  ),
                 );
               }),
         ),
@@ -66,9 +86,3 @@ class _RESSCDirectory extends State<RESSCDirectory> {
   }
 }
 
-class System {
-  String systemName;
-  System (this.systemName);
-}
-
-class _System extends State<RESSCDirectory>

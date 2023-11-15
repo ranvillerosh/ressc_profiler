@@ -18,7 +18,7 @@ Future<void> main() async {
     if (user == null) {
       runApp(const MyApp());
     } else {
-      runApp(const Chooser());
+      runApp(Chooser());
     }
   });
 }
@@ -49,11 +49,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
   bool _passwordVisibility = false;
 
   @override
   Widget build(BuildContext context) {
+    String? userEmail;
+    String? userPassword;
 
     return Scaffold(
       appBar: AppBar(
@@ -96,9 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintText: 'Please enter your username',
                   labelText: 'Username',
                 ),
-                onSaved: (String? value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
+                onChanged: (String? value) {
+                  userEmail = value;
                 },
                 // validator adds validation function
                 // validator: (String? value) {
@@ -122,6 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   //   return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
                   // },
                 ),
+                onChanged: (String? value) {
+                  userPassword = value;
+                },
               ),
               const Padding(padding: EdgeInsets.all(5)),
               Row(
@@ -136,7 +141,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                       flex: 5,
                       child: FilledButton(
-                          onPressed: () async {  },
+                          onPressed: () async {
+                            try {
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: userEmail!, password: userPassword!);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                print('No user found for that email.');
+                              } else if (e.code == 'wrong-password') {
+                                print('Wrong password provided for that user.');
+                              }
+                            } finally {
+                              if(FirebaseAuth.instance.currentUser != null) {
+                                _navigateToChooser(context);
+                              }
+                            }
+                            },
                           child: const Text("Login"))
                   )
                 ],
@@ -146,5 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       )
     );
+    }
+  void _navigateToChooser(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Chooser()));
   }
 }
