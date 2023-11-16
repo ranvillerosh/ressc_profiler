@@ -143,12 +143,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: FilledButton(
                           onPressed: () async {
                             try {
+                              _loginToast(context);
                               await FirebaseAuth.instance.signInWithEmailAndPassword(email: userEmail!, password: userPassword!);
+                              debugPrint("Logging in");
                             } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                print('No user found for that email.');
-                              } else if (e.code == 'wrong-password') {
-                                print('Wrong password provided for that user.');
+                              if (e.code == "user-not-found") {
+                                _userNotFoundToast(context);
+                                debugPrint("User not found");
+                              } else if (e.code == "wrong-password") {
+                                _wrongPasswordToast(context);
+                                debugPrint("Wrong password");
                               }
                             } finally {
                               if(FirebaseAuth.instance.currentUser != null) {
@@ -168,5 +172,35 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   void _navigateToChooser(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Chooser()));
+  }
+
+  void _loginToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Logging In, please wait...'),
+        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  void _wrongPasswordToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Wrong Password!'),
+        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  void _userNotFoundToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('User NOT found!'),
+        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
   }
 }

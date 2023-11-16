@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Data/system.dart';
@@ -59,23 +60,21 @@ class _RESSCPortal extends State<RESSCPortal> {
               ),
               itemCount: systemList.length,
               itemBuilder: (BuildContext, index) {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(18)
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Text(
-                        systemList[index].systemName,
-                      textWidthBasis: TextWidthBasis.parent,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.height/35
-                      ),
+                return Card(
+                  // clipBehavior is necessary because, without it, the InkWell's animation
+                  // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
+                  // This comes with a small performance cost, and you should not set [clipBehavior]
+                  // unless you need it.
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      debugPrint('Card tapped.');
+                    },
+                    child: SizedBox.expand(
+                      // width: double.infinity,
+                      // height: double.infinity,
+                      child: AutoSizeText(systemList[index].systemName),
                     ),
                   ),
                 );

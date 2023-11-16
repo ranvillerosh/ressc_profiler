@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Data/trainee.dart';
+
 class RESSCDirectory extends StatefulWidget {
   const RESSCDirectory({super.key, required this.title});
 
@@ -14,6 +16,8 @@ class _RESSCDirectory extends State<RESSCDirectory> {
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
+  List<Trainee> traineeList = [];
+
   @override
   Widget build(BuildContext context) {
 
@@ -26,27 +30,25 @@ class _RESSCDirectory extends State<RESSCDirectory> {
       body: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
-            childAspectRatio: 1.0,
+            childAspectRatio: 2.0,
           ),
-          itemCount: systemList.length,
+          itemCount: traineeList.length,
           itemBuilder: (BuildContext, index) {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(18)
-              ),
-              child: FittedBox(
-                fit: BoxFit.fill,
-                child: Text(
-                  systemList[index].systemName,
-                  textWidthBasis: TextWidthBasis.parent,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.height/35
-                  ),
+            return Card(
+                // clipBehavior is necessary because, without it, the InkWell's animation
+                // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
+                // This comes with a small performance cost, and you should not set [clipBehavior]
+                // unless you need it.
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                splashColor: Colors.blue.withAlpha(30),
+                onTap: () {
+                  debugPrint('Card tapped.');
+                },
+                child: const SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: Text('A card that can be tapped'),
                 ),
               ),
             );
