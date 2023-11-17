@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'Data/system.dart';
 
 class Chooser extends StatelessWidget{
@@ -37,7 +35,7 @@ class _RESSCPortal extends State<RESSCPortal> {
   @override
   Widget build(BuildContext context) {
     List<System> systemList = [];
-    var directory = new System("Directory");
+    var directory = System(context, "Directory");
     systemList.add(directory);
 
     return Scaffold(
@@ -69,12 +67,15 @@ class _RESSCPortal extends State<RESSCPortal> {
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
+                      systemList[index].navigateToSystem(context);
                       debugPrint('Card tapped.');
                     },
-                    child: SizedBox.expand(
-                      // width: double.infinity,
-                      // height: double.infinity,
-                      child: AutoSizeText(systemList[index].systemName),
+                    child: Center(
+                      child: AutoSizeText(
+                          systemList[index].systemName,
+                          maxFontSize: double.infinity,
+                          minFontSize: 30,
+                      ),
                     ),
                   ),
                 );

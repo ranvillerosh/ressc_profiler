@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  auto_size_text: ^3.0.0  #add dependency for auto size text
+  transparent_image: ^2.0.1 #add transparent image for Fade-in Memory Image
+
 
   firebase_core: ^2.20.0  # add dependency for Firebase Core
   cloud_firestore: ^4.13.0  # add dependency for Cloud Firestore
