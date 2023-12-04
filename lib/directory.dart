@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class RESSCDirectory extends StatefulWidget {
   const RESSCDirectory({super.key, required this.title});
@@ -18,12 +19,16 @@ class _RESSCDirectory extends State<RESSCDirectory> {
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
+  // Get a non-default Storage bucket
+  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://doh-chd-car-portal-app.appspot.com").ref();
+  
   @override
   Widget build(BuildContext context) {
 
-    List<Trainee> traineeList = [];
 
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "https://i.pinimg.com/originals/25/78/61/25786134576ce0344893b33a051160b1.jpg", Training());
+
+    List<Trainee> traineeList = [];
+    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "Placeholders/profilePicturePlaceHolder.jpg", Training());
     traineeList.add(sampleTraineeData);
 
     return Scaffold(
@@ -48,18 +53,19 @@ class _RESSCDirectory extends State<RESSCDirectory> {
                 },
                 child: Center(
                   child: SizedBox.expand(
-                    child: Row (
+                      child: Row (
                       children: [
-                      Expanded(
+                        Spacer(
+                          flex: 1,
+                        ),
+                        Expanded(
                           flex: 4,
                           child:
                           FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            fit: BoxFit.fill,
-                            imageScale: 1.0,
-                            image: traineeList[index].profilePicture!,
+                              placeholder: kTransparentImage,
+                              image: _getProfilePic(traineeList[index].profilePicture!).toString()
                           )
-                      ),
+                        ),
                         Spacer(
                           flex: 1,
                         ),
@@ -79,6 +85,8 @@ class _RESSCDirectory extends State<RESSCDirectory> {
           }),
     );
   }
-
-
+  Future<Uri> _getProfilePic (String imageURL) async {
+    var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL() as String);
+    return profilePicURL;
+  }
 }

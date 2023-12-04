@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class Trainee {
   String? nameFirst;
   String? nameMiddle;
