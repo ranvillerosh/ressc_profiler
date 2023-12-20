@@ -34,6 +34,11 @@ class _RESSCDirectory extends State<RESSCDirectory> {
         title: const Text('RESSC Directory'),
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search))
+        ],
       ),
       body: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

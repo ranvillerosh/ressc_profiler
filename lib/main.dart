@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                       flex: 5,
                       child: FilledButton(
-                        onPressed: () {  },
+                        onPressed: () { _showMyDialog(); },
                         child: const Text("Sign Up!"))
                   ),
                   const Padding(padding: EdgeInsets.all(5)),
@@ -172,6 +172,34 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
     }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('No account yet?'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Only authorized personnel are given access to this system'),
+                Text('Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _navigateToChooser(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Chooser()));
   }
