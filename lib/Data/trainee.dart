@@ -4,6 +4,7 @@ class Trainee {
   String? nameFirst;
   String? nameMiddle;
   String? nameLast;
+  String? position;
   DateTime? birthdate;
   String? contactNumber1;
   String? contactNumber2;

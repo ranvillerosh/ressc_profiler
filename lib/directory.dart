@@ -52,6 +52,7 @@ class _RESSCDirectory extends State<RESSCDirectory> {
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
+                  _showUserProfile(sampleTraineeData);
                   debugPrint('Card tapped.');
                 },
                 child: Center(
@@ -91,5 +92,39 @@ class _RESSCDirectory extends State<RESSCDirectory> {
   Future<Uri> _getProfilePic (String imageURL) async {
     var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL() as String);
     return profilePicURL;
+  }
+
+  Future<void> _showUserProfile(Trainee traineeData) async {
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Trainee Information"),
+          content: SingleChildScrollView(
+            child: ListView(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(traineeData.nameFirst.toString())),
+                    Expanded(child: Text(traineeData.nameMiddle.toString())),
+                    Expanded(child: Text(traineeData.nameLast.toString())),
+                  ],
+                ),
+              ],
+            )
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
