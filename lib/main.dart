@@ -101,13 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintText: 'Please enter your username',
                   labelText: 'Username',
                 ),
-                onChanged: (String? value) {
-                  userEmail = value;
+                onChanged: (String? valueUsername) {
+                  userEmail = valueUsername;
                 },
-                // validator adds validation function
-                // validator: (String? value) {
-                //   return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                // },
+                //validator adds validation function
+                validator: (String? value) {
+                  return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                },
               ),
               TextFormField(
                 obscureText: !_passwordVisibility,
@@ -118,16 +118,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   suffixIcon: IconButton(
                     onPressed: () => setState(() {
                       _passwordVisibility = !_passwordVisibility;
+
                     }),
                     icon: Icon(_passwordVisibility ? Icons.visibility_off : Icons.visibility),
                   ),
-                  // validator adds validation function
-                  // validator: (String? value) {
-                  //   return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
-                  // },
                 ),
-                onChanged: (String? value) {
-                  userPassword = value;
+                onChanged: (String? valueUserpassword) {
+                  userPassword = valueUserpassword;
                 },
               ),
               const Padding(padding: EdgeInsets.all(5)),
@@ -205,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _loginToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
+    ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('Logging In, please wait...'),
@@ -215,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _wrongPasswordToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
+    ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('Wrong Password!'),
@@ -225,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _userNotFoundToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
+    ScaffoldMessengerState scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('User NOT found!'),

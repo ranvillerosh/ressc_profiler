@@ -41,6 +41,7 @@ class _RESSCDirectory extends State<RESSCDirectory> {
         ],
       ),
       body: GridView.builder(
+          padding: EdgeInsets.all(15.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             childAspectRatio: 2.0,
@@ -98,31 +99,13 @@ class _RESSCDirectory extends State<RESSCDirectory> {
 
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Trainee Information"),
-          content: SingleChildScrollView(
-            child: ListView(
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(traineeData.nameFirst.toString())),
-                    Expanded(child: Text(traineeData.nameMiddle.toString())),
-                    Expanded(child: Text(traineeData.nameLast.toString())),
-                  ],
-                ),
-              ],
+        return Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Scaffold(
+              backgroundColor: Color(Theme.of(context).canvasColor.green),
             )
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Dismiss'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
