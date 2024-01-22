@@ -5,7 +5,6 @@ import 'Data/system.dart';
 
 class Chooser extends StatelessWidget{
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,59 +29,119 @@ class RESSCPortal extends StatefulWidget {
 
 class _RESSCPortal extends State<RESSCPortal> {
 
-
-
   @override
   Widget build(BuildContext context) {
     List<System> systemList = [];
     var directory = System(context, "Directory");
     systemList.add(directory);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.greenAccent,
-          ),
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                childAspectRatio: 1.0,
-              ),
-              itemCount: systemList.length,
-              itemBuilder: (BuildContext, index) {
-                return Card(
-                  // clipBehavior is necessary because, without it, the InkWell's animation
-                  // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
-                  // This comes with a small performance cost, and you should not set [clipBehavior]
-                  // unless you need it.
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      systemList[index].navigateToSystem(context);
-                      debugPrint('Card tapped.');
-                    },
-                    child: Center(
-                      child: AutoSizeText(
-                          systemList[index].systemName,
-                          maxFontSize: double.infinity,
-                          minFontSize: 30,
-                      ),
-                    ),
-                  ),
-                );
-              }),
+    //adaptive layout
+    if (MediaQuery.of(context).size.width > 500) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              // borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: Colors.greenAccent,
+            ),
+            child: FractionallySizedBox(
+              widthFactor: 0.75,
+              child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: systemList.length,
+                  itemBuilder: (BuildContext, index) {
+                    return Card(
+                      // clipBehavior is necessary because, without it, the InkWell's animation
+                      // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
+                      // This comes with a small performance cost, and you should not set [clipBehavior]
+                      // unless you need it.
+                      clipBehavior: Clip.hardEdge,
+                      child: InkWell(
+                          splashColor: Colors.blue.withAlpha(30),
+                          onTap: () {
+                            systemList[index].navigateToSystem(context);
+                            debugPrint('Card tapped.');
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                systemList[index].systemName,
+                                // style: TextStyle(
+                                //   fontSize: MediaQuery.of(context).size.height/35
+                              ),
+                            ),
+                          )
+                      ),
+                    );
+                  }),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              // borderRadius: BorderRadius.all(Radius.circular(20)),
+              color: Colors.greenAccent,
+            ),
+            child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 1.0,
+                ),
+                itemCount: systemList.length,
+                itemBuilder: (BuildContext, index) {
+                  return Card(
+                    // clipBehavior is necessary because, without it, the InkWell's animation
+                    // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
+                    // This comes with a small performance cost, and you should not set [clipBehavior]
+                    // unless you need it.
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () {
+                          systemList[index].navigateToSystem(context);
+                          debugPrint('Card tapped.');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              systemList[index].systemName,
+                              // style: TextStyle(
+                              //   fontSize: MediaQuery.of(context).size.height/35
+                            ),
+                          ),
+                        )
+                    ),
+                  );
+                }),
+          ),
+        ),
+      );
+    }
+
+
   }
 }
 
