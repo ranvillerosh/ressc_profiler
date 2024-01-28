@@ -1,4 +1,6 @@
-import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../trainee_profile.dart';
 
 class Trainee {
   String? nameFirst;
@@ -14,4 +16,8 @@ class Trainee {
   dynamic trainings;
 
   Trainee(this.nameFirst, this.nameMiddle, this.nameLast, this.birthdate, this.contactNumber1, this.contactNumber2, this.emailPersonal, this.emailOfficial, this.profilePicture, this.trainings);
+
+  void showProfile(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TraineeProfile(this)));
+  }
 }

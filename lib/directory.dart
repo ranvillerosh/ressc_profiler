@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gif/gif.dart';
+import 'package:ressc_profiler/trainee_profile.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
@@ -54,7 +53,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
-                  _showUserProfile(sampleTraineeData);
+                  sampleTraineeData.showProfile(context);
                   debugPrint('Card tapped.');
                 },
                 child: Center(
@@ -97,76 +96,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
   Future<Uri> _getProfilePic (String imageURL) async {
-    var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL() as String);
+    var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL());
     return profilePicURL;
-  }
-
-  Future<void> _showUserProfile(Trainee traineeData) async {
-    // GifController _controller = GifController(vsync: vsync);
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return Padding(
-            padding: EdgeInsets.all(15),
-            child: Container(
-                padding: const EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                child: Scaffold(
-                  backgroundColor: Color(Theme.of(context).canvasColor.green),
-                  appBar: AppBar(
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                    title: const Text("Trainee Information"),
-                  ),
-                  body: Column(
-                    children: [
-                      //Trainee Information Details || Bio-data
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child:
-                            FadeInImage.assetNetwork(
-                              placeholder: "assets/media/profile_icon.gif",
-                              image: "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2",),
-                          ),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          Expanded(
-                            flex: 11,
-                            child:
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    TextField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: "First Name"
-                                      ),
-
-                                    )
-                                  ],
-                                )
-                              ],
-                            )
-                          )
-                        ]
-                      ),
-                      //Trainee Contact Details
-                      Row(),
-                      //Training List
-                      Column()
-                    ],
-                  )
-                )
-            ),
-        );
-      },
-    );
   }
 }
