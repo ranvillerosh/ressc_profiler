@@ -26,7 +26,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   Widget build(BuildContext context) {
 
     List<Trainee> traineeList = [];
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "Placeholders/profilePicturePlaceHolder.jpg", Training());
+    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2", Training());
     traineeList.add(sampleTraineeData);
 
     return Scaffold(
