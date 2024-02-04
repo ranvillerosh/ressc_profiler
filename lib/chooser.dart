@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
 import 'Data/system.dart';
 
-class Chooser extends StatelessWidget{
-  const Chooser({Key? key}) : super(key: key);
+class Chooser extends StatefulWidget {
+  const Chooser({super.key, required this.title});
+
+  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'RESSC Portal',
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
-          useMaterial3: true
-      ),
-      home: const RESSCPortal(),
-    );
-  }
+  State<Chooser> createState() => _Chooser();
 }
 
-class RESSCPortal extends StatefulWidget {
-  const RESSCPortal({Key? key}) : super(key: key);
-
-
-  @override
-  State<RESSCPortal> createState() => _RESSCPortal();
-}
-
-class _RESSCPortal extends State<RESSCPortal> {
+class _Chooser extends State<Chooser> {
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +23,7 @@ class _RESSCPortal extends State<RESSCPortal> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text("RESSC Poral"),
+          title: Text(widget.title),
         ),
         body: Center(
           child: Container(
@@ -56,7 +41,7 @@ class _RESSCPortal extends State<RESSCPortal> {
                     childAspectRatio: 1.0,
                   ),
                   itemCount: systemList.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (BuildContext, index) {
                     return Card(
                       clipBehavior: Clip.hardEdge,
                       child: InkWell(
@@ -71,6 +56,8 @@ class _RESSCPortal extends State<RESSCPortal> {
                               fit: BoxFit.fitWidth,
                               child: Text(
                                 systemList[index].systemName,
+                                // style: TextStyle(
+                                //   fontSize: MediaQuery.of(context).size.height/35
                               ),
                             ),
                           )
@@ -85,13 +72,14 @@ class _RESSCPortal extends State<RESSCPortal> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text("RESSC Poral"),
+          title: Text(widget.title),
         ),
         body: Center(
           child: Container(
             padding: const EdgeInsets.all(8.0),
             alignment: Alignment.center,
             decoration: const BoxDecoration(
+              // borderRadius: BorderRadius.all(Radius.circular(20)),
               color: Colors.greenAccent,
             ),
             child: GridView.builder(
@@ -100,7 +88,7 @@ class _RESSCPortal extends State<RESSCPortal> {
                   childAspectRatio: 1.0,
                 ),
                 itemCount: systemList.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext, index) {
                   return Card(
                     clipBehavior: Clip.hardEdge,
                     child: InkWell(
@@ -110,11 +98,13 @@ class _RESSCPortal extends State<RESSCPortal> {
                           debugPrint('Card tapped.');
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: EdgeInsets.all(5.0),
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
                             child: Text(
                               systemList[index].systemName,
+                              // style: TextStyle(
+                              //   fontSize: MediaQuery.of(context).size.height/35
                             ),
                           ),
                         )
@@ -125,5 +115,8 @@ class _RESSCPortal extends State<RESSCPortal> {
         ),
       );
     }
+
+
   }
 }
+

@@ -18,15 +18,19 @@ Future<void> main() async {
       .authStateChanges()
       .listen((User? user) {
     if (user == null) {
-      runApp(const MyApp());
+      runApp(const Login());
     } else {
-      runApp(Chooser());
+      runApp(
+        MaterialApp(
+            home: Chooser(title: "RESSC Portal")
+        )
+      );
     }
   });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Login extends StatelessWidget {
+  const Login({super.key});
 
   // This widget is the root of your application.
   @override
@@ -51,15 +55,12 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
   bool _passwordVisibility = false;
-
   @override
   Widget build(BuildContext context) {
     String? userEmail;
     String? userPassword;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -133,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                       flex: 5,
                       child: FilledButton(
-                        onPressed: () { _showMyDialog(); },
+                        onPressed: () { _requestAccountDialog(); },
                         child: const Text("Sign Up!"))
                   ),
                   const Padding(padding: EdgeInsets.all(5)),
@@ -169,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
     }
-  Future<void> _showMyDialog() async {
+  Future<void> _requestAccountDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -198,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToChooser(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Chooser()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const Chooser(title: "RESSC Portal")));
   }
 
   void _loginToast(BuildContext context) {
