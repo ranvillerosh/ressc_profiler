@@ -18,6 +18,6 @@ class Trainee {
   Trainee(this.nameFirst, this.nameMiddle, this.nameLast, this.birthdate, this.contactNumber1, this.contactNumber2, this.emailPersonal, this.emailOfficial, this.profilePicture, this.trainings);
 
   void showProfile(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TraineeProfile(this)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => TraineeProfile(this)));
   }
 }

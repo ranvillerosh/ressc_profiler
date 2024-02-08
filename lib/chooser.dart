@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 import 'Data/system.dart';
 
-class Chooser extends StatelessWidget{
+class Chooser extends StatefulWidget {
   const Chooser({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'RESSC Portal',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
-        useMaterial3: true
-      ),
-      home: const RESSCPortal(),
-    );
-  }
-}
-
-class RESSCPortal extends StatefulWidget {
-  const RESSCPortal({Key? key}) : super(key: key);
-
 
   @override
-  State<RESSCPortal> createState() => _RESSCPortal();
+  State<Chooser> createState() => _Chooser();
 }
 
-class _RESSCPortal extends State<RESSCPortal> {
+class _Chooser extends State<Chooser> {
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +22,7 @@ class _RESSCPortal extends State<RESSCPortal> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text("RESSC Poral"),
+          title: Text("RESSC Portal"),
         ),
         body: Center(
           child: Container(

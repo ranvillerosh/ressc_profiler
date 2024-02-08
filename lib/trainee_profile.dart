@@ -21,18 +21,12 @@ class _TraineeProfile extends State<TraineeProfile>{
   @override
   Widget build(BuildContext context) {
     const title = "Trainee Profile";
-    MaterialApp(
-        title: title,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
-            useMaterial3: true
+    Scaffold(
+        appBar: AppBar(
+            title: Text(title)
         ),
-        home: Scaffold(
-          appBar: AppBar(
-              title: Text(title)
-          ),
-          resizeToAvoidBottomInset: true,
-          body: Container(
+        resizeToAvoidBottomInset: true,
+        body: Container(
             alignment: Alignment.center,
             child: Column(
               children: [
@@ -50,7 +44,6 @@ class _TraineeProfile extends State<TraineeProfile>{
                 )
               ],
             )
-          )
         )
     );
     throw UnimplementedError();
