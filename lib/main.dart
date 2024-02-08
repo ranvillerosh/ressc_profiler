@@ -198,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToChooser(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Chooser()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Chooser()));
   }
 
   void _loginToast(BuildContext context) {
