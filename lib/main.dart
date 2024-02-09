@@ -119,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   suffixIcon: IconButton(
                     onPressed: () => setState(() {
                       _passwordVisibility = !_passwordVisibility;
-
+                      userPassword = TextEditingValue as String?;
                     }),
                     icon: Icon(_passwordVisibility ? Icons.visibility_off : Icons.visibility),
                   ),
