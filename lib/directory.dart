@@ -21,11 +21,12 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   // Get a non-default Storage bucket
   final storageRef = FirebaseStorage.instanceFor(bucket: "gs://doh-chd-car-portal-app.appspot.com").ref();
 
-  
+  //"https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2",
+
   @override
   Widget build(BuildContext context) {
     List<Trainee> traineeList = [];
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2", "religionChristian", Office("SampleOffice"),Training("Sample Disease Surveillance and Data Management Training","SDSDMT"));
+    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),Training("Sample Disease Surveillance and Data Management Training","SDSDMT"));
     traineeList.add(sampleTraineeData);
 
     return Scaffold(
@@ -65,10 +66,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                         Expanded(
                           flex: 4,
                           child:
-                          FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2"
-                          )
+                          buildProfilePicture(sampleTraineeData)
                         ),
                         Spacer(
                           flex: 1,
@@ -98,4 +96,18 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL());
     return profilePicURL;
   }
+
+  Widget buildProfilePicture(Trainee profilePicture){
+    try {
+      return
+        FadeInImage.assetNetwork(
+            placeholder: "assets/media/profile_icon.gif",
+            image:
+            "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2");
+    } catch (e) {
+      return
+        Image.asset("assets/media/profile_icon.gif");
+    }
+  }
+  
 }

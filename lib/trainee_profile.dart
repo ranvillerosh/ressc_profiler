@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
@@ -30,10 +32,8 @@ class _TraineeProfile extends State<TraineeProfile> {
                   ),
                   Expanded(
                       flex: 8,
-                      child: FadeInImage.assetNetwork(
-                          placeholder: "asset/media/profile_icon.gif",
-                          image:
-                              "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2")),
+                      child: buildProfilePicture(widget.trainee)
+                  ),
                   Spacer(
                     flex: 1,
                   ),
@@ -98,10 +98,27 @@ class _TraineeProfile extends State<TraineeProfile> {
                     ),
                   ],
                 ),
-              )
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/29, 10.0, MediaQuery.of(context).size.width/29, 10.0),
+                child: ListView.builder(itemBuilder: itemBuilder)
+              ),
             ],
           ),
         ));
+  }
+
+  Widget buildProfilePicture(Trainee profilePicture){
+    try {
+      return
+        FadeInImage.assetNetwork(
+          placeholder: "assets/media/profile_icon.gif",
+          image:
+          "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2");
+    } catch (e) {
+      return
+          Image.asset("assets/media/profile_icon.gif");
+    }
   }
 
   Widget buildNameRow(String label, String? initialValue) {
