@@ -60,7 +60,14 @@ class _TraineeProfile extends State<TraineeProfile> {
                                     "Position", widget.trainee.position),
                                 SizedBox(width: 10),
                                 buildOccupationRow(
-                                    "Office", widget.trainee.position)
+                                    "Office", widget.trainee.office.name)
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                buildAgeReligionRow("Age", "${DateTime.now().difference(widget.trainee.birthdate!).inDays/365.floor()}"),
+                                SizedBox(width: 10,),
+                                buildAgeReligionRow("Religion", widget.trainee.religion)
                               ],
                             )
                           ],
@@ -70,6 +77,27 @@ class _TraineeProfile extends State<TraineeProfile> {
                     flex: 1,
                   )
                 ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/29, 10.0, MediaQuery.of(context).size.width/29, 10.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        buildContactRow("Personal Email", widget.trainee.emailPersonal),
+                        SizedBox(width: 10,),
+                        buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        buildContactRow("Official Email", widget.trainee.emailOfficial),
+                        SizedBox(width: 10,),
+                        buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
+                      ],
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -86,6 +114,24 @@ class _TraineeProfile extends State<TraineeProfile> {
   }
 
   Widget buildOccupationRow(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+      ),
+    );
+  }
+
+  Widget buildContactRow(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+      ),
+    );
+  }
+
+  Widget buildAgeReligionRow(String label, String? initialValue) {
     return Expanded(
       child: TextFormField(
         initialValue: initialValue,

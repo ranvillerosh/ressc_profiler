@@ -1,4 +1,5 @@
 class Office {
+  String name;
   String? roomNumber;
   String? buildingNumber;
   String? buildingName;
@@ -9,4 +10,8 @@ class Office {
   String? district;
   String? municipality;
   String? city;
+
+  Office(
+      this.name,
+      );
 }

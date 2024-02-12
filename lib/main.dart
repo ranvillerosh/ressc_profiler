@@ -5,7 +5,6 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   // add firebase options
@@ -14,17 +13,11 @@ Future<void> main() async {
   );
 
   // firebase Auth
-  FirebaseAuth.instance
-      .authStateChanges()
-      .listen((User? user) {
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
       runApp(const Login());
     } else {
-      runApp(
-        MaterialApp(
-            home: Chooser(title: "RESSC Portal")
-        )
-      );
+      runApp(MaterialApp(home: Chooser(title: "RESSC Portal")));
     }
   });
 }
@@ -57,20 +50,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _passwordVisibility = false;
+
   @override
   Widget build(BuildContext context) {
     String? userEmail;
     String? userPassword;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-          child: Container(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: Center(
+            child: Container(
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.center,
           decoration: const BoxDecoration(
@@ -78,8 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.greenAccent,
           ),
           constraints: BoxConstraints.expand(
-            width: MediaQuery.of(context).size.width/3,
-            height: Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 + MediaQuery.of(context).size.height/2,
+            width: MediaQuery.of(context).size.width / 3,
+            height:
+                Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 +
+                    MediaQuery.of(context).size.height / 2,
           ),
           // transform: Matrix4.rotationZ(0.1),
           child: Column(
@@ -90,8 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: MediaQuery.of(context).size.height/35
-                ),
+                    fontSize: MediaQuery.of(context).size.height / 35),
                 textAlign: TextAlign.center,
                 softWrap: true,
                 'Welcome to the RESSC Training Directory! Please login to continue.',
@@ -107,7 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 //validator adds validation function
                 validator: (String? value) {
-                  return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+                  return (value != null && value.contains('@'))
+                      ? 'Do not use the @ char.'
+                      : null;
                 },
               ),
               TextFormField(
@@ -121,7 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       _passwordVisibility = !_passwordVisibility;
                       userPassword = TextEditingValue as String?;
                     }),
-                    icon: Icon(_passwordVisibility ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(_passwordVisibility
+                        ? Icons.visibility_off
+                        : Icons.visibility),
                   ),
                 ),
                 onChanged: (String? valueUserpassword) {
@@ -134,9 +132,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Expanded(
                       flex: 5,
                       child: FilledButton(
-                        onPressed: () { _requestAccountDialog(); },
-                        child: const Text("Sign Up!"))
-                  ),
+                          onPressed: () {
+                            _requestAccountDialog();
+                          },
+                          child: const Text("Sign Up!"))),
                   const Padding(padding: EdgeInsets.all(5)),
                   Expanded(
                       flex: 5,
@@ -144,7 +143,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: () async {
                             try {
                               _loginToast(context);
-                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: userEmail!, password: userPassword!);
+                              await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: userEmail!,
+                                      password: userPassword!);
                               debugPrint("Logging in");
                             } on FirebaseAuthException catch (e) {
                               if (e.code == "user-not-found") {
@@ -155,21 +157,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                 debugPrint("Wrong password");
                               }
                             } finally {
-                              if(FirebaseAuth.instance.currentUser != null) {
+                              if (FirebaseAuth.instance.currentUser != null) {
                                 _navigateToChooser(context);
                               }
                             }
-                            },
-                          child: const Text("Login"))
-                  )
+                          },
+                          child: const Text("Login")))
                 ],
               )
             ],
           ),
-        )
-      )
-    );
-    }
+        )));
+  }
+
   Future<void> _requestAccountDialog() async {
     return showDialog<void>(
       context: context,
@@ -180,8 +180,10 @@ class _MyHomePageState extends State<MyHomePage> {
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Only authorized personnel are given access to this system'),
-                Text('Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
+                Text(
+                    'Only authorized personnel are given access to this system'),
+                Text(
+                    'Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
               ],
             ),
           ),
@@ -199,7 +201,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _navigateToChooser(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const Chooser(title: "RESSC Portal")));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Chooser(title: "RESSC Portal")));
   }
 
   void _loginToast(BuildContext context) {
@@ -207,7 +212,8 @@ class _MyHomePageState extends State<MyHomePage> {
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('Logging In, please wait...'),
-        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+        action: SnackBarAction(
+            label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
@@ -217,7 +223,8 @@ class _MyHomePageState extends State<MyHomePage> {
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('Wrong Password!'),
-        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+        action: SnackBarAction(
+            label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
@@ -227,7 +234,8 @@ class _MyHomePageState extends State<MyHomePage> {
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('User NOT found!'),
-        action: SnackBarAction(label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+        action: SnackBarAction(
+            label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
