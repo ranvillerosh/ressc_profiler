@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:ressc_profiler/Data/office.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
@@ -13,7 +14,7 @@ class RESSCDirectory extends StatefulWidget {
   State<RESSCDirectory> createState() => _RESSCDirectory();
 }
 
-class _RESSCDirectory extends State<RESSCDirectory> {
+class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixin {
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
@@ -24,7 +25,7 @@ class _RESSCDirectory extends State<RESSCDirectory> {
   @override
   Widget build(BuildContext context) {
     List<Trainee> traineeList = [];
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2", [Training("sss")]);
+    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2", "religionChristian", Office("SampleOffice"),Training("Sample Disease Surveillance and Data Management Training","SDSDMT"));
     traineeList.add(sampleTraineeData);
 
     return Scaffold(

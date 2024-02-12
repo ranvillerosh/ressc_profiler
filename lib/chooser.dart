@@ -11,7 +11,6 @@ class Chooser extends StatefulWidget {
 }
 
 class _Chooser extends State<Chooser> {
-
   @override
   Widget build(BuildContext context) {
     List<System> systemList = [];
@@ -60,8 +59,7 @@ class _Chooser extends State<Chooser> {
                                 //   fontSize: MediaQuery.of(context).size.height/35
                               ),
                             ),
-                          )
-                      ),
+                          )),
                     );
                   }),
             ),
@@ -107,16 +105,12 @@ class _Chooser extends State<Chooser> {
                               //   fontSize: MediaQuery.of(context).size.height/35
                             ),
                           ),
-                        )
-                    ),
+                        )),
                   );
                 }),
           ),
         ),
       );
     }
-
-
   }
 }
-

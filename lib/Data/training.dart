@@ -1,5 +1,9 @@
 class Training{
-  String title;
+  String name;
+  String shortName;
 
-  Training(this.title);
+  Training(
+      this.name,
+      this.shortName
+      );
 }
