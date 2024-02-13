@@ -1,8 +1,7 @@
-import 'dart:js';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
+import 'Data/training.dart';
 
 class TraineeProfile extends StatefulWidget {
   TraineeProfile({super.key, required this.trainee});
@@ -101,7 +100,7 @@ class _TraineeProfile extends State<TraineeProfile> {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/29, 10.0, MediaQuery.of(context).size.width/29, 10.0),
-                child: ListView.builder(itemBuilder: itemBuilder)
+                child: buildTrainingsList(widget.trainee.trainings)
               ),
             ],
           ),
@@ -155,5 +154,26 @@ class _TraineeProfile extends State<TraineeProfile> {
         decoration: InputDecoration(labelText: label),
       ),
     );
+  }
+  
+  Widget buildTrainingsList(List<Training>? trainings) {
+    if(trainings!=null && trainings.isNotEmpty) {
+      return ListView.builder(
+          itemCount: trainings.length,
+          itemBuilder: (BuildContext, index) {
+            ListTile(
+              title: Text(trainings[index].shortName),
+              subtitle: Text(trainings[index].name),
+            );
+          });
+    } else if(trainings == null){
+      return Expanded(
+        child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
+      );
+    } else {
+      return Expanded(
+        child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
+      );
+    }
   }
 }
