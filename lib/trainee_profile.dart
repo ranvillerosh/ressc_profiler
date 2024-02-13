@@ -1,6 +1,9 @@
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
+
 import 'Data/training.dart';
 
 class TraineeProfile extends StatefulWidget {
@@ -21,14 +24,12 @@ class _TraineeProfile extends State<TraineeProfile> {
               "${widget.trainee.nameFirst!} ${widget.trainee.nameMiddle!.substring(0, 1)}. ${widget.trainee.nameLast!}"),
         ),
         body: Container(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width/29),
           alignment: Alignment.center,
           child: Column(
             children: [
               Row(
                 children: [
-                  Spacer(
-                    flex: 1,
-                  ),
                   Expanded(
                       flex: 8,
                       child: buildProfilePicture(widget.trainee)
@@ -72,36 +73,38 @@ class _TraineeProfile extends State<TraineeProfile> {
                           ],
                         ),
                       )),
-                  Spacer(
-                    flex: 1,
-                  )
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/29, 10.0, MediaQuery.of(context).size.width/29, 10.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        buildContactRow("Personal Email", widget.trainee.emailPersonal),
-                        SizedBox(width: 10,),
-                        buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        buildContactRow("Official Email", widget.trainee.emailOfficial),
-                        SizedBox(width: 10,),
-                        buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
-                      ],
-                    ),
-                  ],
-                ),
+              Row(
+                children: [
+                  buildContactRow("Personal Email", widget.trainee.emailPersonal),
+                  SizedBox(width: 10,),
+                  buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/29, 10.0, MediaQuery.of(context).size.width/29, 10.0),
-                child: buildTrainingsList(widget.trainee.trainings)
+              Row(
+                children: [
+                  buildContactRow("Official Email", widget.trainee.emailOfficial),
+                  SizedBox(width: 10,),
+                  buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
+                ],
               ),
+              Expanded(
+                child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: widget.trainee.trainings!.length,
+                    itemBuilder: (context, index) {
+                      return Expanded(
+                        child: ListTile(
+                          title: Text(widget.trainee.trainings![index].shortName),
+                          subtitle: Text(widget.trainee.trainings![index].name),
+                        ),
+                      );
+                    }),
+              )
+              // buildTrainingsList(widget.trainee.trainings, context)
             ],
           ),
         ));
@@ -111,12 +114,12 @@ class _TraineeProfile extends State<TraineeProfile> {
     try {
       return
         FadeInImage.assetNetwork(
-          placeholder: "assets/media/profile_icon.gif",
-          image:
-          "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2");
+            placeholder: "assets/media/profile_icon.gif",
+            image:
+            "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2");
     } catch (e) {
       return
-          Image.asset("assets/media/profile_icon.gif");
+        Image.asset("assets/media/profile_icon.gif");
     }
   }
 
@@ -155,23 +158,27 @@ class _TraineeProfile extends State<TraineeProfile> {
       ),
     );
   }
-  
-  Widget buildTrainingsList(List<Training>? trainings) {
+
+  Widget buildTrainingsList(List<Training>? trainings, BuildContext context) {
     if(trainings!=null && trainings.isNotEmpty) {
-      return ListView.builder(
-          itemCount: trainings.length,
-          itemBuilder: (BuildContext, index) {
-            ListTile(
-              title: Text(trainings[index].shortName),
-              subtitle: Text(trainings[index].name),
-            );
-          });
-    } else if(trainings == null){
       return Expanded(
+        child: ListView.builder(
+            itemCount: widget.trainee.trainings!.length,
+            itemBuilder: (context, index) {
+              return Expanded(
+                child: ListTile(
+                  title: Text(widget.trainee.trainings![index].shortName),
+                  subtitle: Text(widget.trainee.trainings![index].name),
+                ),
+              );
+            }),
+      );
+    } else if(trainings == null){
+      return const Expanded(
         child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
       );
     } else {
-      return Expanded(
+      return const Expanded(
         child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
       );
     }

@@ -26,7 +26,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     List<Trainee> traineeList = [];
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[Training("Sample Disease Surveillance and Data Management Training","SDSDMT")]);
+    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[Training("Sample Disease Surveillance and Data Management Training 1","SDSDMT 1"),Training("Sample Disease Surveillance and Data Management Training 2","SDSDMT 2"),Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3"),Training("Sample Disease Surveillance and Data Management Training 4","SDSDMT 4"),Training("Sample Disease Surveillance and Data Management Training 5","SDSDMT 5"),Training("Sample Disease Surveillance and Data Management Training 6","SDSDMT 6"),Training("Sample Disease Surveillance and Data Management Training 7","SDSDMT 7"),Training("Sample Disease Surveillance and Data Management Training 8","SDSDMT 8")]);
     traineeList.add(sampleTraineeData);
 
     return Scaffold(
