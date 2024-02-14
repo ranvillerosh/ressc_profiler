@@ -24,8 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.ressc_profiler"
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -58,6 +57,8 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    buildToolsVersion '30.0.3'
+    ndkVersion ndkVersion
 }
 
 flutter {

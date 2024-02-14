@@ -9,7 +9,7 @@ Future<void> main() async {
 
   // add firebase options
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.android,
   );
 
   // firebase Auth
