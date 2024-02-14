@@ -23,6 +23,7 @@ class Trainee {
       this.nameFirst,
       this.nameMiddle,
       this.nameLast,
+      this.position,
       this.birthdate,
       this.contactNumber1,
       this.contactNumber2,

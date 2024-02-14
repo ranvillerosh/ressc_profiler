@@ -1,7 +1,6 @@
-import 'dart:js';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
 
 import 'Data/training.dart';
@@ -65,8 +64,10 @@ class _TraineeProfile extends State<TraineeProfile> {
                             ),
                             Row(
                               children: [
+                                buildAgeReligionRow("Birthdate", DateFormat.yMMMMd().format(widget.trainee.birthdate!)),
+                                const SizedBox(width: 10,),
                                 buildAgeReligionRow("Age", "${DateTime.now().difference(widget.trainee.birthdate!).inDays/365.floor()}"),
-                                SizedBox(width: 10,),
+                                const SizedBox(width: 10,),
                                 buildAgeReligionRow("Religion", widget.trainee.religion)
                               ],
                             )
@@ -89,25 +90,18 @@ class _TraineeProfile extends State<TraineeProfile> {
                   buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
                 ],
               ),
-              Expanded(
-                child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
-              ),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: widget.trainee.trainings!.length,
-                    itemBuilder: (context, index) {
-                      return Expanded(
-                        child: ListTile(
-                          title: Text(widget.trainee.trainings![index].shortName),
-                          subtitle: Text(widget.trainee.trainings![index].name),
-                        ),
-                      );
-                    }),
-              )
-              // buildTrainingsList(widget.trainee.trainings, context)
+              const SizedBox(height: 10,),
+              buildTrainingsList(widget.trainee.trainings, context)
             ],
           ),
-        ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            //code for new training dialog
+          },
+          child: const Icon(Icons.add),
+        ),
+    );
   }
 
   Widget buildProfilePicture(Trainee profilePicture){
@@ -166,9 +160,16 @@ class _TraineeProfile extends State<TraineeProfile> {
             itemCount: widget.trainee.trainings!.length,
             itemBuilder: (context, index) {
               return Expanded(
-                child: ListTile(
-                  title: Text(widget.trainee.trainings![index].shortName),
-                  subtitle: Text(widget.trainee.trainings![index].name),
+                child: Card(
+                  child: InkWell(
+                    onTap: (){
+                      _showTrainingDetailsDialog(trainings[index], context);
+                    },
+                    child: ListTile(
+                      title: Text(widget.trainee.trainings![index].shortName),
+                      subtitle: Text(widget.trainee.trainings![index].name),
+                    ),
+                  ),
                 ),
               );
             }),
@@ -183,4 +184,67 @@ class _TraineeProfile extends State<TraineeProfile> {
       );
     }
   }
+
+  Future<void> _showTrainingDetailsDialog(Training training, BuildContext context) async {
+    var trainingDates = "No training dates set.";
+    if (training.startDate!=null && training.endDate!=null) {
+      trainingDates = "${DateFormat.yMMMMd(training.startDate)} - ${DateFormat.yMMMMd(training.endDate)}";
+    }
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(training.shortName),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(training.name),
+                Text(trainingDates),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> requestAccountDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('No account yet?'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Only authorized personnel are given access to this system'),
+                Text(
+                    'Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
