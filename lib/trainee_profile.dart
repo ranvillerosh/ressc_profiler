@@ -21,6 +21,15 @@ class _TraineeProfile extends State<TraineeProfile> {
         appBar: AppBar(
           title: Text(
               "${widget.trainee.nameFirst!} ${widget.trainee.nameMiddle!.substring(0, 1)}. ${widget.trainee.nameLast!}"),
+          actions: [
+            IconButton.filledTonal(
+                onPressed: () {
+                  _editTraineeProfileDialog(context, widget.trainee);
+                },
+                icon: Icon(Icons.edit_rounded)
+            ),
+            SizedBox(width: 10,)
+          ],
         ),
         body: Container(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width/29),
@@ -187,8 +196,12 @@ class _TraineeProfile extends State<TraineeProfile> {
 
   Future<void> _showTrainingDetailsDialog(Training training, BuildContext context) async {
     var trainingDates = "No training dates set.";
+    var trainingVenue = "No Training Venue specified.";
     if (training.startDate!=null && training.endDate!=null) {
       trainingDates = "${DateFormat.yMMMMd(training.startDate)} - ${DateFormat.yMMMMd(training.endDate)}";
+    }
+    if (training.venue!=null) {
+      trainingVenue = training.venue!;
     }
     return showDialog<void>(
       context: context,
@@ -201,6 +214,7 @@ class _TraineeProfile extends State<TraineeProfile> {
               children: <Widget>[
                 Text(training.name),
                 Text(trainingDates),
+                Text(trainingVenue)
               ],
             ),
           ),
@@ -217,30 +231,97 @@ class _TraineeProfile extends State<TraineeProfile> {
     );
   }
 
-  Future<void> requestAccountDialog(BuildContext context) async {
+  Future<void> _editTraineeProfileDialog(BuildContext context, Trainee trainee) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('No account yet?'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                    'Only authorized personnel are given access to this system'),
-                Text(
-                    'Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
+          title: Text('Edit Trainee Profile'),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        flex: 8,
+                        child: buildProfilePicture(widget.trainee)
+                    ),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    Expanded(
+                        flex: 18,
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  buildNameRow(
+                                      "First Name", widget.trainee.nameFirst),
+                                  SizedBox(width: 10),
+                                  buildNameRow(
+                                      "Middle Name", widget.trainee.nameMiddle),
+                                  SizedBox(width: 10),
+                                  buildNameRow(
+                                      "Last Name", widget.trainee.nameLast),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  buildOccupationRow(
+                                      "Position", widget.trainee.position),
+                                  SizedBox(width: 10),
+                                  buildOccupationRow(
+                                      "Office", widget.trainee.office.name)
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  buildAgeReligionRow("Birthdate", DateFormat.yMMMMd().format(widget.trainee.birthdate!)),
+                                  const SizedBox(width: 10,),
+                                  buildAgeReligionRow("Age", "${DateTime.now().difference(widget.trainee.birthdate!).inDays/365.floor()}"),
+                                  const SizedBox(width: 10,),
+                                  buildAgeReligionRow("Religion", widget.trainee.religion)
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    buildContactRow("Personal Email", widget.trainee.emailPersonal),
+                    SizedBox(width: 10,),
+                    buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
+                  ],
+                ),
+                Row(
+                  children: [
+                    buildContactRow("Official Email", widget.trainee.emailOfficial),
+                    SizedBox(width: 10,),
+                    buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
+                  ],
+                ),
+                buildTrainingsList(trainee.trainings, context)
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Dismiss'),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
+            OutlinedButton(
+                onPressed: () {
+                  //push changes to server
+                },
+                child: const Text("Save"))
           ],
         );
       },

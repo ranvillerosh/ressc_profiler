@@ -15,7 +15,7 @@ dependencies:
   transparent_image: ^2.0.1 #add transparent image for Fade-in Memory Image
 
 
-  firebase_core: ^2.20.0  # add dependency for Firebase Core
+  firebase_core: ^2.25.4  # add dependency for Firebase Core
   cloud_firestore: ^4.13.6  # add dependency for Cloud Firestore
 
   cupertino_icons: ^1.0.2

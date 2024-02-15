@@ -17,7 +17,12 @@ Future<void> main() async {
     if (user == null) {
       runApp(const Login());
     } else {
-      runApp(MaterialApp(home: Chooser(title: "RESSC Portal")));
+      runApp(
+          MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: Chooser(title: "RESSC Portal")
+          )
+      );
     }
   });
 }
@@ -29,6 +34,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'RESSC Portal',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
@@ -147,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   .signInWithEmailAndPassword(
                                       email: userEmail!,
                                       password: userPassword!);
-                              debugPrint("Logging in");
+                                        debugPrint("Logging in");
                             } on FirebaseAuthException catch (e) {
                               if (e.code == "user-not-found") {
                                 _userNotFoundToast(context);

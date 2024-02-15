@@ -11,7 +11,9 @@ class _TrainingDetails extends State<TrainingDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        title: Text("Add New Training"),
+      ),
     );
   }
 }
