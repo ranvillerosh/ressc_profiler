@@ -8,15 +8,13 @@ import 'enum_library.dart';
 class Training{
   String name;
   String shortName;
-  String? venue;
-  DateTime? startDate;
-  DateTime? endDate;
   String? rationale;
   String? background;
   List<String>? objectives;
   List<CompetencySkill>? competencySkill;
-  String? logo;
-  List<String>? photoDocumentation;
+  List<Trainee>? graduatesList;
+  String? logoURL;
+  List<TrainingBatch>? batchList;
 
   Training(
       this.name,
@@ -36,5 +34,14 @@ class Training{
 }
 
 class TrainingBatch {
+  Training training;
+  String? venue;
+  DateTime? startDate;
+  DateTime? endDate;
+  List<Trainee>? mentorList;
+  List<String>? photoDocumentation;
 
+  TrainingBatch(
+      this.training,
+      );
 }
