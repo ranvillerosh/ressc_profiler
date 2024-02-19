@@ -17,7 +17,7 @@ class Trainee {
   String? profilePicture;
   String? religion;
   Office office;
-  List<Training>? trainings;
+  List<TrainingBatch>? trainings;
 
   Trainee(
       this.nameFirst,

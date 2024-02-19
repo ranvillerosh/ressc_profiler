@@ -44,4 +44,14 @@ class TrainingBatch {
   TrainingBatch(
       this.training,
       );
+
+  //Named Constructor
+  TrainingBatch.trainingBatchWithDates({
+    required this.training,
+    required this.startDate,
+    required this.endDate
+})
+
+  // TODO
 }
+

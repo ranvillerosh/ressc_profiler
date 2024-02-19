@@ -162,7 +162,7 @@ class _TraineeProfile extends State<TraineeProfile> {
     );
   }
 
-  Widget buildTrainingsList(List<Training>? trainings, BuildContext context) {
+  Widget buildTrainingsList(List<TrainingBatch>? trainings, BuildContext context) {
     if(trainings!=null && trainings.isNotEmpty) {
       return Expanded(
         child: ListView.builder(
@@ -175,8 +175,8 @@ class _TraineeProfile extends State<TraineeProfile> {
                       _showTrainingDetailsDialog(trainings[index], context);
                     },
                     child: ListTile(
-                      title: Text(widget.trainee.trainings![index].shortName),
-                      subtitle: Text(widget.trainee.trainings![index].name),
+                      title: Text(widget.trainee.trainings![index].training.shortName),
+                      subtitle: Text(widget.trainee.trainings![index].training.name),
                     ),
                   ),
                 ),
@@ -194,25 +194,25 @@ class _TraineeProfile extends State<TraineeProfile> {
     }
   }
 
-  Future<void> _showTrainingDetailsDialog(Training training, BuildContext context) async {
+  Future<void> _showTrainingDetailsDialog(TrainingBatch trainingBatch, BuildContext context) async {
     var trainingDates = "No training dates set.";
     var trainingVenue = "No Training Venue specified.";
-    if (training.startDate!=null && training.endDate!=null) {
-      trainingDates = "${DateFormat.yMMMMd(training.startDate)} - ${DateFormat.yMMMMd(training.endDate)}";
+    if (trainingBatch.startDate!=null && trainingBatch.endDate!=null) {
+      trainingDates = "${DateFormat.yMMMMd(trainingBatch.startDate)} - ${DateFormat.yMMMMd(trainingBatch.endDate)}";
     }
-    if (training.venue!=null) {
-      trainingVenue = training.venue!;
+    if (trainingBatch.venue!=null) {
+      trainingVenue = trainingBatch.venue!;
     }
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(training.shortName),
+          title: Text(trainingBatch.training.shortName),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(training.name),
+                Text(trainingBatch.training.name),
                 Text(trainingDates),
                 Text(trainingVenue)
               ],
