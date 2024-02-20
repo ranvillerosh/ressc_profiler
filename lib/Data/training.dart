@@ -46,11 +46,11 @@ class TrainingBatch {
       );
 
   //Named Constructor
-  TrainingBatch.trainingBatchWithDates({
+  TrainingBatch.withDates({
     required this.training,
     required this.startDate,
     required this.endDate
-})
+  });
 
   // TODO
 }
