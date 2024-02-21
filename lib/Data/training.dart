@@ -21,15 +21,12 @@ class Training{
       this.shortName
       );
 
-  void addTraining(Trainee trainee, BuildContext context) {
+  void showTraining(Training training, BuildContext context) {
+    var training = Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3");
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => TrainingDetails(
-              //
-            )
-        )
-    );
+            builder: (context) => TrainingDetails(training: training,)));
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ressc_profiler/Data/office.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,8 +20,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   // Get a non-default Storage bucket
   final storageRef = FirebaseStorage.instanceFor(bucket: "gs://doh-chd-car-portal-app.appspot.com").ref();
 
-  //"https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2",
-
   @override
   Widget build(BuildContext context) {
     List<Trainee> traineeList = [];
@@ -39,6 +36,18 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               onPressed: () {},
               icon: Icon(Icons.search))
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              leading: ClipOval(
+                child: Image.asset("assets/media/profile_icon.gif"),
+
+              ),
+            )
+          ],
+        ),
       ),
       body: GridView.builder(
           padding: EdgeInsets.all(15.0),
@@ -103,7 +112,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         FadeInImage.assetNetwork(
             placeholder: "assets/media/profile_icon.gif",
             image:
-            "https://firebasestorage.googleapis.com/v0/b/doh-chd-car-portal-app.appspot.com/o/Placeholders%2FprofilePicturePlaceHolder.jpg?alt=media&token=7344d9d2-156d-4fde-88eb-d1253f8b14e2");
+            profilePicture.profilePicture!);
     } catch (e) {
       return
         Image.asset("assets/media/profile_icon.gif");

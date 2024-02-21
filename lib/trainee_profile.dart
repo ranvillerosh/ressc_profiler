@@ -225,6 +225,12 @@ class _TraineeProfile extends State<TraineeProfile> {
                 Navigator.of(context).pop();
               },
             ),
+            TextButton(
+              child: const Text('Show More'),
+              onPressed: () {
+                trainingBatch.training.showTraining(trainingBatch.training, context);
+              },
+            ),
           ],
         );
       },
