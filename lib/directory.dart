@@ -40,10 +40,22 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       drawer: Drawer(
         child: ListView(
           children: [
-            ListTile(
-              leading: ClipOval(
-                child: Image.asset("assets/media/profile_icon.gif"),
-
+            Card(
+              child: ListTile(
+                leading: ClipOval(
+                  child: Image.asset("assets/media/profile_icon.gif"),
+                ),
+                title: Text("Add New Trainee Profile"),
+                onTap: () {}, //TODO add new trainee
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: ClipOval(
+                  child: Image.asset("assets/media/training_icon.png"),
+                ),
+                title: Text("Add New Training"),
+                onTap: () {}, //TODO add new training
               ),
             )
           ],
