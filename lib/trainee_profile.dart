@@ -68,7 +68,7 @@ class _TraineeProfile extends State<TraineeProfile> {
                                     "Position", widget.trainee.position),
                                 SizedBox(width: 10),
                                 buildOccupationRow(
-                                    "Office", widget.trainee.office.name)
+                                    "Office", widget.trainee.office?.name)
                               ],
                             ),
                             Row(
@@ -281,7 +281,7 @@ class _TraineeProfile extends State<TraineeProfile> {
                                       "Position", widget.trainee.position),
                                   SizedBox(width: 10),
                                   buildOccupationRow(
-                                      "Office", widget.trainee.office.name)
+                                      "Office", widget.trainee.office?.name)
                                 ],
                               ),
                               Row(

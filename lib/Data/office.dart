@@ -1,5 +1,5 @@
 class Office {
-  String name;
+  String? name;
   String? roomNumber;
   String? buildingNumber;
   String? buildingName;

@@ -16,7 +16,7 @@ class Trainee {
   String? emailOfficial;
   String? profilePicture;
   String? religion;
-  Office office;
+  Office? office;
   List<TrainingBatch>? trainings;
 
   Trainee(
@@ -41,5 +41,14 @@ class Trainee {
             builder: (context) => TraineeProfile(
                   trainee: this,
                 )));
+  }
+
+  int? computeAge() {
+    try{
+      var computedAge = DateTime.now().difference(birthdate!).inDays/365.floor() as int;
+      return computedAge;
+    } catch (e) {
+      return null;
+    }
   }
 }
