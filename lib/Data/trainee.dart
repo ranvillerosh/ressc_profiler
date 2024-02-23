@@ -5,6 +5,7 @@ import '../trainee_profile.dart';
 import 'office.dart';
 
 class Trainee {
+  String? id;
   String? nameFirst;
   String? nameMiddle;
   String? nameLast;

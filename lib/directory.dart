@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/office.dart';
@@ -8,8 +9,10 @@ import 'Data/training.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class RESSCDirectory extends StatefulWidget {
-  const RESSCDirectory({super.key, required this.title});
+  RESSCDirectory({super.key, required this.title, required this.db, required this.storageRef});
   final String title;
+  FirebaseFirestore db;
+  Reference storageRef;
 
   @override
   State<RESSCDirectory> createState() => _RESSCDirectory();
@@ -19,13 +22,9 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
-  // Get a non-default Storage bucket
-  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://doh-chd-car-portal-app.appspot.com").ref();
-
   @override
   Widget build(BuildContext context) {
-
-
+    var db = widget.db.collection("Trainees").snapshots().listen((event) { }); //TODO
     List<Trainee> traineeList = [];
     var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", "SamplePosition", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 1","SDSDMT 1")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 2","SDSDMT 2")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")), TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")),TrainingBatch.withDates(training: Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3"), startDate: null, endDate: null)]);
     traineeList.add(sampleTraineeData);
@@ -120,7 +119,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
   Future<Uri> _getProfilePic (String imageURL) async {
-    var profilePicURL = Uri.parse(await storageRef.child(imageURL).getDownloadURL());
+    var profilePicURL = Uri.parse(await widget.storageRef.child(imageURL).getDownloadURL());
     return profilePicURL;
   }
 
@@ -189,7 +188,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                               ),
                               Row(
                                 children: [
-                                  buildBirthdatePicker(context, newTraineeProfile.birthdate),
+                                  buildBirthdatePicker(context, newTraineeProfile.birthdate, newTraineeProfile),
                                   const SizedBox(width: 10,),
                                   buildAgeRow("Age", age),
                                   const SizedBox(width: 10,),
@@ -220,6 +219,24 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             ),
           ),
           actions: <Widget>[
+            Card(
+              child: InkWell(
+                onTap: () {
+                  //TODO add training chooser
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add_circle_sharp),
+                      Text("Add Trainings")
+                    ],
+                  ),
+                ),
+              ),
+
+            ),
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
@@ -227,8 +244,9 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               },
             ),
             OutlinedButton(
-                onPressed: () {
-                  //push changes to server
+                onPressed: () async {
+                  newTraineeProfile.id = await widget.db.collection("Trainees").doc().id;
+                  // await widget.db.collection("Trainee").doc("${newTraineeProfile.id}").set(newTraineeProfile);
                 },
                 child: const Text("Save"))
           ],
@@ -307,7 +325,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Widget buildBirthdatePicker(BuildContext context, DateTime? selectedBirthdate) {
+  Widget buildBirthdatePicker(BuildContext context, DateTime? selectedBirthdate, Trainee trainee) {
     TextEditingController textEditingController = TextEditingController();
     try {
       var displayDate = DateFormat.yMMMMd().format(DateTime.now());
@@ -320,6 +338,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 .then((value) => selectedBirthdate = value)
                 .then((value) => displayDate = DateFormat.yMMMMd().format(selectedBirthdate!))
                 .then((value) => debugPrint(displayDate))
+                .then((value) => trainee.birthdate = selectedBirthdate)
                 .whenComplete(() => textEditingController.text = displayDate);
           },
         ),
@@ -335,10 +354,15 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 .then((value) => selectedBirthdate = value)
                 .then((value) => displayDate = DateFormat.yMMMMd().format(selectedBirthdate!))
                 .then((value) => debugPrint(displayDate))
+                .then((value) => trainee.birthdate = selectedBirthdate)
                 .whenComplete(() => textEditingController.text = displayDate);
           },
         ),
       );
+    }
+
+    Widget buildTrainingChooser() {
+      //TODO
     }
 
   }
