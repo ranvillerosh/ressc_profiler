@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ressc_profiler/Data/training.dart';
 import '../trainee_profile.dart';
 import 'office.dart';
 
-class Trainee {
+class Trainee with ChangeNotifier{
   String? id;
+  int _age = 0;
+  int get age => _age;
   String? nameFirst;
   String? nameMiddle;
   String? nameLast;
@@ -44,12 +47,21 @@ class Trainee {
                 )));
   }
 
-  int? computeAge() {
-    try{
-      var computedAge = DateTime.now().difference(birthdate!).inDays/365.floor() as int;
-      return computedAge;
+  void addTrainee(BuildContext context, FirebaseFirestore db) {
+
+  }
+
+  computeAge() {
+    try {
+      var computedAge = DateTime.now().difference(birthdate!).inDays/365.floor();
+      _age = computedAge.toInt();
+      debugPrint("printing computed age ${age.toString()} ${_age.toString()}");
+      notifyListeners();
     } catch (e) {
-      return null;
+      debugPrint("age: ${age} ${_age} ${e.toString()} *some error happened");
+      _age = 45;
+      notifyListeners();
     }
+    notifyListeners();
   }
 }

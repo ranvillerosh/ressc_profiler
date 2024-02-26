@@ -21,6 +21,7 @@ class RESSCDirectory extends StatefulWidget {
 class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixin {
   bool shadowColor = false;
   double? scrolledUnderElevation;
+  Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +138,11 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   }
 
   Future<void> _addNewTraineeProfileDialog(BuildContext context) async {
-    Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
-    String? age;
-
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
+        return AlertDialog (
           title: Text('Add New Trainee Profile'),
           content: SizedBox(
             height: MediaQuery.of(context).size.height,
@@ -187,11 +185,18 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                                 ],
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   buildBirthdatePicker(context, newTraineeProfile.birthdate, newTraineeProfile),
-                                  const SizedBox(width: 10,),
-                                  buildAgeRow("Age", age),
-                                  const SizedBox(width: 10,),
+                                  const SizedBox(width: 8,),
+                                  ListenableBuilder(
+                                    listenable: newTraineeProfile,
+                                    builder: (BuildContext context, Widget? child) {
+                                      return Text("Age: ${newTraineeProfile.age}");
+                                    },
+                                  ),
+                                  const SizedBox(width: 20,),
+                                  //
                                   buildReligionRow("Religion", newTraineeProfile.religion)
                                 ],
                               )
@@ -230,7 +235,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.add_circle_sharp),
-                      Text("Add Trainings")
+                      Text("Add Training(s)")
                     ],
                   ),
                 ),
@@ -254,6 +259,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       },
     );
   }
+
   Widget addProfilePicture(Trainee? trainee){
     try {
       return
@@ -314,17 +320,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       ),
     );
   }
-
-  Widget buildAgeRow(String label, String? initialValue){
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        readOnly: true,
-      ),
-    );
-  }
-
+  
   Widget buildBirthdatePicker(BuildContext context, DateTime? selectedBirthdate, Trainee trainee) {
     TextEditingController textEditingController = TextEditingController();
     try {
@@ -339,6 +335,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 .then((value) => displayDate = DateFormat.yMMMMd().format(selectedBirthdate!))
                 .then((value) => debugPrint(displayDate))
                 .then((value) => trainee.birthdate = selectedBirthdate)
+                .then((value) => trainee.computeAge())
                 .whenComplete(() => textEditingController.text = displayDate);
           },
         ),
@@ -353,17 +350,13 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             await showDatePicker(context: context, firstDate: DateTime(1900),lastDate: DateTime.now())
                 .then((value) => selectedBirthdate = value)
                 .then((value) => displayDate = DateFormat.yMMMMd().format(selectedBirthdate!))
-                .then((value) => debugPrint(displayDate))
+                .then((value) => debugPrint("$displayDate ${e.toString()}"))
                 .then((value) => trainee.birthdate = selectedBirthdate)
+                .then((value) => trainee.computeAge())
                 .whenComplete(() => textEditingController.text = displayDate);
           },
         ),
       );
     }
-
-    Widget buildTrainingChooser() {
-      //TODO
-    }
-
   }
 }
