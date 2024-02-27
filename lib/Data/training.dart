@@ -28,6 +28,45 @@ class Training{
         MaterialPageRoute(
             builder: (context) => TrainingDetails(training: training,)));
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'shortName': shortName,
+      'rationale': rationale,
+      'background': background,
+      'objectives': objectives,
+      'competencySkill': competencySkill?.map((skill) => skill.toMap()).toList(),
+      'graduatesList': graduatesList?.map((trainee) => trainee.toMap()).toList(),
+      'logoURL': logoURL,
+      'batchList': batchList?.map((batch) => batch.toMap()).toList(),
+    }..removeWhere((key, value) => value == null);
+  }
+
+  // Factory method to create Training from a Map
+  // factory Training.fromMap(Map<String, dynamic> map) {
+  //   return Training(
+  //     name: map['name'],
+  //     shortName: map['shortName'],
+  //     rationale: map['rationale'],
+  //     background: map['background'],
+  //     objectives: map['objectives'] is Iterable
+  //         ? List.from(map['objectives']).map((objective) => objective.toString()).toList()
+  //         : null,
+  //     competencySkill: map['competencySkill'] is Iterable
+  //         ? List.from(map['competencySkill'])
+  //         .map((skill) => CompetencySkillExtension.fromString(skill.toString()))
+  //         .toList()
+  //         : null,
+  //     graduatesList: map['graduatesList'] is Iterable
+  //         ? List.from(map['graduatesList']).map((trainee) => Trainee.fromMap(trainee)).toList()
+  //         : null,
+  //     logoURL: map['logoURL'],
+  //     batchList: map['batchList'] is Iterable
+  //         ? List.from(map['batchList']).map((batch) => TrainingBatch.fromMap(batch)).toList()
+  //         : null,
+  //   );
+  // }
 }
 
 class TrainingBatch {
@@ -42,6 +81,15 @@ class TrainingBatch {
       this.training,
       );
 
+  TrainingBatch.withDetails({
+    required this.training,
+    this.venue,
+    this.startDate,
+    this.endDate,
+    this.mentorList,
+    this.photoDocumentation,
+  });
+
   //Named Constructor
   TrainingBatch.withDates({
     required this.training,
@@ -49,6 +97,32 @@ class TrainingBatch {
     required this.endDate
   });
 
-  // TODO
+  Map<String, dynamic> toMap() {
+    return {
+      'training': training.toMap(),
+      'venue': venue,
+      'startDate': startDate?.toIso8601String(),
+      'endDate': endDate?.toIso8601String(),
+      'mentorList': mentorList?.map((mentor) => mentor.toMap()).toList(),
+      'photoDocumentation': photoDocumentation,
+    }..removeWhere((key, value) => value == null);
+  }
+
+
+  // Factory method to create TrainingBatch from a Map
+  factory TrainingBatch.fromMap(Map<String, dynamic> map) {
+    return TrainingBatch.withDetails(
+      training: Training.fromMap(map['training']),
+      venue: map['venue'],
+      startDate: map['startDate'] != null ? DateTime.parse(map['startDate']) : null,
+      endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : null,
+      mentorList: map['mentorList'] is Iterable
+          ? List.from(map['mentorList']).map((mentor) => Trainee.fromMap(mentor)).toList()
+          : null,
+      photoDocumentation: map['photoDocumentation'] is Iterable
+          ? List.from(map['photoDocumentation']).map((photo) => photo.toString()).toList()
+          : null,
+    );
+  }
 }
 

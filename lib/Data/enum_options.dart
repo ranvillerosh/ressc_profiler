@@ -49,3 +49,9 @@ enum InstitutionType {
   socialHygieneClinic,
   healthCenter
 }
+
+enum CompetencySkill {
+  DataManagement,
+  Surveillance,
+  DataAnalysis,
+}

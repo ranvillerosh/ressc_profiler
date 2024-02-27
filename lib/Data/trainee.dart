@@ -5,7 +5,7 @@ import 'package:ressc_profiler/Data/training.dart';
 import '../trainee_profile.dart';
 import 'office.dart';
 
-class Trainee with ChangeNotifier{
+class Trainee with ChangeNotifier {
   String? id;
   int _age = 0;
   int get age => _age;
@@ -23,6 +23,9 @@ class Trainee with ChangeNotifier{
   Office? office;
   List<TrainingBatch>? trainings;
 
+  List<Trainee> _traineeList = [];
+  List<Trainee> get traineeList => _traineeList;
+
   Trainee(
       this.nameFirst,
       this.nameMiddle,
@@ -38,6 +41,22 @@ class Trainee with ChangeNotifier{
       this.office,
       this.trainings);
 
+  Trainee.fromDB({
+    this.nameFirst,
+    this.nameMiddle,
+    this.nameLast,
+    this.position,
+    this.birthdate,
+    this.contactNumber1,
+    this.contactNumber2,
+    this.emailPersonal,
+    this.emailOfficial,
+    this.profilePicture,
+    this.religion,
+    this.office,
+    this.id,
+    this.trainings});
+
   void showProfile(BuildContext context) {
     Navigator.push(
         context,
@@ -47,8 +66,79 @@ class Trainee with ChangeNotifier{
                 )));
   }
 
-  void addTrainee(BuildContext context, FirebaseFirestore db) {
+  // Method to save Trainee data to Firestore
+  Future<void> saveToFirestore() async {
+    try {
+      // Get a reference to the Firestore collection
+      DocumentReference trainees = FirebaseFirestore.instance.collection("trainee").doc(id);
 
+      // Convert Trainee object to a Map
+      Map<String, dynamic> traineeData = {
+        'id':id,
+        'nameFirst': nameFirst,
+        'nameMiddle': nameMiddle,
+        'nameLast': nameLast,
+        'position': position,
+        'birthdate': birthdate,
+        'contactNumber1': contactNumber1,
+        'contactNumber2': contactNumber2,
+        'emailPersonal': emailPersonal,
+        'emailOfficial': emailOfficial,
+        'profilePicture': profilePicture,
+        'religion': religion,
+        'office': office?.toMap(), // Assuming Office has a toMap method
+        'trainings': trainings?.map((training) => training.toMap()).toList(), // Assuming TrainingBatch has a toMap method
+      };
+
+      // Add the Trainee data to Firestore
+      await trainees.set(traineeData, SetOptions(merge: true));
+    } catch (e) {
+      print('Error saving to Firestore: $e');
+    }
+  }
+
+  factory Trainee.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options,
+      ) {
+    final data = snapshot.data();
+    return Trainee.fromDB(
+      nameFirst: data?["nameFirst"],
+      nameMiddle: data?["nameMiddle"],
+      nameLast: data?["nameLast"],
+      position: data?["position"],
+      contactNumber1: data?["contactNumber1"],
+      contactNumber2: data?["contactNumber2"],
+      emailPersonal: data?["emailPersonal"],
+      emailOfficial: data?["emailOfficial"],
+      profilePicture: data?["profilePicture"],
+      religion: data?["religion"],
+      office: data?["office"] != null ? Office.fromMap(data?["office"]) : null,
+      id: data?["id"],
+      trainings: data?["trainings"] is Iterable
+          ? List.from(data?["trainings"])
+          .map((training) => TrainingBatch.fromMap(training))
+          .toList()
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'nameFirst': nameFirst,
+      'nameMiddle': nameMiddle,
+      'nameLast': nameLast,
+      'position': position,
+      'birthdate': birthdate?.toIso8601String(),
+      'contactNumber1': contactNumber1,
+      'contactNumber2': contactNumber2,
+      'emailPersonal': emailPersonal,
+      'emailOfficial': emailOfficial,
+      'profilePicture': profilePicture,
+      'religion': religion,
+      'office': office?.toMap(),
+      'trainings': trainings?.map((training) => training.toMap()).toList(),
+    }..removeWhere((key, value) => value == null);
   }
 
   computeAge() {
@@ -59,9 +149,7 @@ class Trainee with ChangeNotifier{
       notifyListeners();
     } catch (e) {
       debugPrint("age: ${age} ${_age} ${e.toString()} *some error happened");
-      _age = 45;
       notifyListeners();
     }
-    notifyListeners();
   }
 }

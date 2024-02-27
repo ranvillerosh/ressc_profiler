@@ -165,22 +165,22 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                             children: [
                               Row(
                                 children: [
-                                  buildNameRow(
+                                  buildFirstName(
                                       "First Name", newTraineeProfile.nameFirst),
                                   SizedBox(width: 10),
-                                  buildNameRow(
+                                  buildMiddleName(
                                       "Middle Name", newTraineeProfile.nameMiddle),
                                   SizedBox(width: 10),
-                                  buildNameRow(
+                                  buildLastName(
                                       "Last Name", newTraineeProfile.nameLast),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  buildOccupationRow(
+                                  buildPosition(
                                       "Position", newTraineeProfile.position),
                                   SizedBox(width: 10),
-                                  buildOccupationRow(
+                                  buildOffice(
                                       "Office", newTraineeProfile.office?.name)
                                 ],
                               ),
@@ -192,12 +192,14 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                                   ListenableBuilder(
                                     listenable: newTraineeProfile,
                                     builder: (BuildContext context, Widget? child) {
-                                      return Text("Age: ${newTraineeProfile.age}");
+                                      return Expanded(
+                                          flex: 3,
+                                          child: Text("Age: ${newTraineeProfile.age}"));
                                     },
                                   ),
                                   const SizedBox(width: 20,),
                                   //
-                                  buildReligionRow("Religion", newTraineeProfile.religion)
+                                  buildReligion("Religion", newTraineeProfile.religion)
                                 ],
                               )
                             ],
@@ -207,16 +209,16 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 ),
                 Row(
                   children: [
-                    buildContactRow("Personal Email", newTraineeProfile.emailPersonal),
+                    buildPersonalEmail("Personal Email", newTraineeProfile.emailPersonal),
                     SizedBox(width: 10,),
-                    buildContactRow("Contact Number: Primary", newTraineeProfile.contactNumber1)
+                    buildContactNumberPrimary("Contact Number: Primary", newTraineeProfile.contactNumber1)
                   ],
                 ),
                 Row(
                   children: [
-                    buildContactRow("Official Email", newTraineeProfile.emailOfficial),
+                    buildOfficialEmail("Official Email", newTraineeProfile.emailOfficial),
                     SizedBox(width: 10,),
-                    buildContactRow("Contact Number: Secondary", newTraineeProfile.contactNumber2)
+                    buildContactNumberSecondary("Contact Number: Secondary", newTraineeProfile.contactNumber2)
                   ],
                 ),
                 // buildTrainingsList(trainee.trainings, context)
@@ -250,8 +252,11 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             ),
             OutlinedButton(
                 onPressed: () async {
-                  newTraineeProfile.id = await widget.db.collection("Trainees").doc().id;
-                  // await widget.db.collection("Trainee").doc("${newTraineeProfile.id}").set(newTraineeProfile);
+                  newTraineeProfile.id = await widget.db.collection("trainee").doc().id;
+                  newTraineeProfile.saveToFirestore().whenComplete(() =>
+                      Navigator.of(context).pop());
+
+                  //TODO add to local list
                 },
                 child: const Text("Save"))
           ],
@@ -273,59 +278,86 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     }
   }
 
-  Widget buildNameRow(String label, String? initialValue) {
+  Widget buildFirstName(String label, String? initialValue) {
     return Expanded(
       child: TextFormField(
         initialValue: initialValue,
         decoration: InputDecoration(labelText: label),
         onChanged: (String? newValue){
-          initialValue = newValue;
+          setState(() {
+            newTraineeProfile.nameFirst = newValue;
+          });
+        },
+
+      ),
+    );
+  }
+
+  Widget buildMiddleName(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.nameMiddle = newValue;
+          });
+        },
+
+      ),
+    );
+  }
+
+  Widget buildLastName(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.nameLast = newValue;
+          });
+        },
+
+      ),
+    );
+  }
+
+  Widget buildPosition(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.position = newValue;
+          });
+        },
+
+      ),
+    );
+  }
+
+  Widget buildOffice(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.office = Office(newValue);
+          });
         },
       ),
     );
   }
 
-  Widget buildOccupationRow(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          initialValue = newValue;
-        },
-      ),
-    );
-  }
-
-  Widget buildContactRow(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          initialValue = newValue;
-        },
-      ),
-    );
-  }
-
-  Widget buildReligionRow(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          initialValue = newValue;
-        },
-      ),
-    );
-  }
-  
   Widget buildBirthdatePicker(BuildContext context, DateTime? selectedBirthdate, Trainee trainee) {
     TextEditingController textEditingController = TextEditingController();
     try {
       var displayDate = DateFormat.yMMMMd().format(DateTime.now());
       return Expanded(
+        flex: 10,
         child: TextFormField(
           controller: textEditingController,
           decoration: const InputDecoration(labelText: "Birthdate"),
@@ -358,5 +390,77 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         ),
       );
     }
+  }
+
+  Widget buildReligion(String label, String? initialValue) {
+    return Expanded(
+      flex: 14,
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.religion = newValue;
+          });
+        },
+
+      ),
+    );
+  }
+
+  Widget buildPersonalEmail(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.emailPersonal = newValue;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget buildContactNumberPrimary(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.contactNumber1 = newValue;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget buildOfficialEmail(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.emailOfficial = newValue;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget buildContactNumberSecondary(String label, String? initialValue) {
+    return Expanded(
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(labelText: label),
+        onChanged: (String? newValue){
+          setState(() {
+            newTraineeProfile.contactNumber2 = newValue;
+          });
+        },
+      ),
+    );
   }
 }
