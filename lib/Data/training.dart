@@ -43,30 +43,42 @@ class Training{
     }..removeWhere((key, value) => value == null);
   }
 
+  Training.fromDB({
+    required this.name,
+    required this.shortName,
+    this.rationale,
+    this.background,
+    this.objectives,
+    this.competencySkill,
+    this.graduatesList,
+    this.logoURL,
+    this.batchList
+});
+
   // Factory method to create Training from a Map
-  // factory Training.fromMap(Map<String, dynamic> map) {
-  //   return Training(
-  //     name: map['name'],
-  //     shortName: map['shortName'],
-  //     rationale: map['rationale'],
-  //     background: map['background'],
-  //     objectives: map['objectives'] is Iterable
-  //         ? List.from(map['objectives']).map((objective) => objective.toString()).toList()
-  //         : null,
-  //     competencySkill: map['competencySkill'] is Iterable
-  //         ? List.from(map['competencySkill'])
-  //         .map((skill) => CompetencySkillExtension.fromString(skill.toString()))
-  //         .toList()
-  //         : null,
-  //     graduatesList: map['graduatesList'] is Iterable
-  //         ? List.from(map['graduatesList']).map((trainee) => Trainee.fromMap(trainee)).toList()
-  //         : null,
-  //     logoURL: map['logoURL'],
-  //     batchList: map['batchList'] is Iterable
-  //         ? List.from(map['batchList']).map((batch) => TrainingBatch.fromMap(batch)).toList()
-  //         : null,
-  //   );
-  // }
+  factory Training.fromMap(Map<String, dynamic> map) {
+    return Training.fromDB(
+      name: map['name'],
+      shortName: map['shortName'],
+      rationale: map['rationale'],
+      background: map['background'],
+      objectives: map['objectives'] is Iterable
+          ? List.from(map['objectives']).map((objective) => objective.toString()).toList()
+          : null,
+      competencySkill: map['competencySkill'] is Iterable
+          ? List.from(map['competencySkill'])
+          .map((skill) => CompetencySkillExtension.fromString(skill.toString()))
+          .toList()
+          : null,
+      graduatesList: map['graduatesList'] is Iterable
+          ? List.from(map['graduatesList']).map((trainee) => Trainee.fromMap(trainee)).toList()
+          : null,
+      logoURL: map['logoURL'],
+      batchList: map['batchList'] is Iterable
+          ? List.from(map['batchList']).map((batch) => TrainingBatch.fromMap(batch)).toList()
+          : null,
+    );
+  }
 }
 
 class TrainingBatch {

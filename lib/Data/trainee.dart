@@ -123,6 +123,7 @@ class Trainee with ChangeNotifier {
     );
   }
 
+  //convert custom objects for pushing to firestore
   Map<String, dynamic> toMap() {
     return {
       'nameFirst': nameFirst,
@@ -139,6 +140,28 @@ class Trainee with ChangeNotifier {
       'office': office?.toMap(),
       'trainings': trainings?.map((training) => training.toMap()).toList(),
     }..removeWhere((key, value) => value == null);
+  }
+
+  // Factory method to create Trainee from a Map
+  factory Trainee.fromMap(Map<String, dynamic> map) {
+    return Trainee.fromDB(
+      nameFirst: map['nameFirst'],
+      nameMiddle: map['nameMiddle'],
+      nameLast: map['nameLast'],
+      position: map['position'],
+      birthdate: map['birthdate'] != null ? DateTime.parse(map['birthdate']) : null,
+      contactNumber1: map['contactNumber1'],
+      contactNumber2: map['contactNumber2'],
+      emailPersonal: map['emailPersonal'],
+      emailOfficial: map['emailOfficial'],
+      profilePicture: map['profilePicture'],
+      religion: map['religion'],
+      office: map['office'] != null ? Office.fromMap(map['office']) : null,
+      id: map['id'],
+      trainings: map['trainings'] is Iterable
+          ? List.from(map['trainings']).map((training) => TrainingBatch.fromMap(training)).toList()
+          : null,
+    );
   }
 
   computeAge() {

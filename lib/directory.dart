@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/office.dart';
+import 'Data/globalData.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -25,10 +26,11 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    var db = widget.db.collection("Trainees").snapshots().listen((event) { }); //TODO
     List<Trainee> traineeList = [];
-    var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", "SamplePosition", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 1","SDSDMT 1")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 2","SDSDMT 2")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")), TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")),TrainingBatch.withDates(training: Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3"), startDate: null, endDate: null)]);
-    traineeList.add(sampleTraineeData);
+    GlobalData.getDirectoryData().whenComplete(() => traineeList = GlobalData.traineesList);
+
+    // var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", "SamplePosition", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 1","SDSDMT 1")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 2","SDSDMT 2")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")), TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")),TrainingBatch.withDates(training: Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3"), startDate: null, endDate: null)]);
+    // traineeList.add(sampleTraineeData);
 
     return Scaffold(
       appBar: AppBar(
@@ -80,8 +82,8 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
-                  sampleTraineeData.showProfile(context);
-                  debugPrint('Card tapped.');
+                  traineeList[index].showProfile(context);
+                  debugPrint('Directory Card tapped.');
                 },
                 child: Center(
                   child: SizedBox.expand(
@@ -93,7 +95,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                         Expanded(
                           flex: 4,
                           child:
-                          buildProfilePicture(sampleTraineeData)
+                          buildProfilePicture(traineeList[index])
                         ),
                         Spacer(
                           flex: 1,
@@ -106,7 +108,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                                 minFontSize: 12,
                                 softWrap: true,
                                 wrapWords: true,
-                                  "A card that can be tapped"
+                                "${traineeList[index].nameFirst} ${traineeList[index].nameMiddle?.substring(0,1)}. ${traineeList[index].nameLast}"
                               ),
                             )
                         ),
@@ -279,81 +281,101 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   }
 
   Widget buildFirstName(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.nameFirst = newValue;
-          });
-        },
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.nameFirst = newValue;
+              });
+            },
 
-      ),
+          ),
+        );
+      }
     );
   }
 
   Widget buildMiddleName(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.nameMiddle = newValue;
-          });
-        },
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.nameMiddle = newValue;
+              });
+            },
 
-      ),
+          ),
+        );
+      }
     );
   }
 
   Widget buildLastName(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.nameLast = newValue;
-          });
-        },
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.nameLast = newValue;
+              });
+            },
 
-      ),
+          ),
+        );
+      }
     );
   }
 
   Widget buildPosition(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.position = newValue;
-          });
-        },
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.position = newValue;
+              });
+            },
 
-      ),
+          ),
+        );
+      }
     );
   }
 
   Widget buildOffice(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.office = Office(newValue);
-          });
-        },
-      ),
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.office = Office(newValue);
+              });
+            },
+          ),
+        );
+      }
     );
   }
 
   Widget buildBirthdatePicker(BuildContext context, DateTime? selectedBirthdate, Trainee trainee) {
-    TextEditingController textEditingController = TextEditingController();
+    late TextEditingController textEditingController = TextEditingController();
     try {
       var displayDate = DateFormat.yMMMMd().format(DateTime.now());
       return Expanded(
@@ -393,74 +415,94 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   }
 
   Widget buildReligion(String label, String? initialValue) {
-    return Expanded(
-      flex: 14,
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.religion = newValue;
-          });
-        },
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          flex: 14,
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.religion = newValue;
+              });
+            },
 
-      ),
+          ),
+        );
+      }
     );
   }
 
   Widget buildPersonalEmail(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.emailPersonal = newValue;
-          });
-        },
-      ),
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.emailPersonal = newValue;
+              });
+            },
+          ),
+        );
+      }
     );
   }
 
   Widget buildContactNumberPrimary(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.contactNumber1 = newValue;
-          });
-        },
-      ),
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.contactNumber1 = newValue;
+              });
+            },
+          ),
+        );
+      }
     );
   }
 
   Widget buildOfficialEmail(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.emailOfficial = newValue;
-          });
-        },
-      ),
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.emailOfficial = newValue;
+              });
+            },
+          ),
+        );
+      }
     );
   }
 
   Widget buildContactNumberSecondary(String label, String? initialValue) {
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(labelText: label),
-        onChanged: (String? newValue){
-          setState(() {
-            newTraineeProfile.contactNumber2 = newValue;
-          });
-        },
-      ),
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            decoration: InputDecoration(labelText: label),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraineeProfile.contactNumber2 = newValue;
+              });
+            },
+          ),
+        );
+      }
     );
   }
 }
