@@ -98,9 +98,7 @@ class Trainee with ChangeNotifier {
   }
 
   factory Trainee.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
     return Trainee.fromDB(
       nameFirst: data?["nameFirst"],

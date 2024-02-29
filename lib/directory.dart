@@ -6,14 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/office.dart';
 import 'Data/globalData.dart';
 import 'Data/trainee.dart';
-import 'Data/training.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class RESSCDirectory extends StatefulWidget {
-  RESSCDirectory({super.key, required this.title, required this.db, required this.storageRef});
+  RESSCDirectory({super.key, required this.title});
   final String title;
-  FirebaseFirestore db;
-  Reference storageRef;
+
 
   @override
   State<RESSCDirectory> createState() => _RESSCDirectory();
@@ -23,14 +20,23 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   bool shadowColor = false;
   double? scrolledUnderElevation;
   Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
+  Map<String, Trainee> traineeMap = {};
+
+  @override
+  void initState()
+  {
+    GlobalData.fetchTrainees().whenComplete(() {
+      setState(() {
+        traineeMap.addAll(GlobalData.traineeMap);
+        debugPrint("GlobalData: ${GlobalData.traineeMap.keys.toString()}");
+      });
+    });
+    GlobalData.listenToTraineeUpdates();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Trainee> traineeList = [];
-    GlobalData.getDirectoryData().whenComplete(() => traineeList = GlobalData.traineesList);
-
-    // var sampleTraineeData = Trainee("nameFirst","nameMiddle", "nameLast", "SamplePosition", DateTime.now(), "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial", null, "religionChristian", Office("SampleOffice"),[TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 1","SDSDMT 1")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 2","SDSDMT 2")),TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")), TrainingBatch(Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3")),TrainingBatch.withDates(training: Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3"), startDate: null, endDate: null)]);
-    // traineeList.add(sampleTraineeData);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,25 +75,52 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
           ],
         ),
       ),
-      body: GridView.builder(
+      body: directoryStream(),
+    );
+  }
+  Future<Uri> _getProfilePic (String imageURL) async {
+    var profilePicURL = Uri.parse(await GlobalData.storageRef.child(imageURL).getDownloadURL());
+    return profilePicURL;
+  }
+
+  Widget directoryStream() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: GlobalData.db.collection('trainee').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return buildDirectoryGrid();
+          }
+        }
+    );
+  }
+
+  Widget buildDirectoryGrid() {
+    if (traineeMap.isNotEmpty) {
+      try {
+        return GridView.builder(
           padding: EdgeInsets.all(15.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             childAspectRatio: 2.0,
           ),
-          itemCount: traineeList.length,
+          itemCount: traineeMap.length,
           itemBuilder: (BuildContext, index) {
             return Card(
               clipBehavior: Clip.hardEdge,
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
-                  traineeList[index].showProfile(context);
-                  debugPrint('Directory Card tapped.');
+                  traineeMap.values.elementAt(index).showProfile(context);
+                    debugPrint(traineeMap.values.elementAt(index).toString());
+                    debugPrint('Directory Card tapped.');
                 },
                 child: Center(
                   child: SizedBox.expand(
-                      child: Row (
+                    child: Row (
                       children: [
                         Spacer(
                           flex: 1,
@@ -95,22 +128,20 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                         Expanded(
                           flex: 4,
                           child:
-                          buildProfilePicture(traineeList[index])
+                            buildProfilePicture(traineeMap.values.elementAt(index))
                         ),
                         Spacer(
                           flex: 1,
                         ),
                         Expanded(
-                            flex: 9,
-                            child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: AutoSizeText(
-                                minFontSize: 12,
-                                softWrap: true,
-                                wrapWords: true,
-                                "${traineeList[index].nameFirst} ${traineeList[index].nameMiddle?.substring(0,1)}. ${traineeList[index].nameLast}"
-                              ),
-                            )
+                        flex: 9,
+                        child: AutoSizeText(
+                          maxLines: 3,
+                          minFontSize: 12,
+                          softWrap: true,
+                          wrapWords: true,
+                          "${traineeMap.values.elementAt(index).nameFirst} ${traineeMap.values.elementAt(index).nameMiddle?.substring(0,1)}. ${traineeMap.values.elementAt(index).nameLast}"
+                          )
                         ),
                       ],
                     )
@@ -118,13 +149,18 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 ),
               ),
             );
-          }),
-    );
-  }
-  Future<Uri> _getProfilePic (String imageURL) async {
-    var profilePicURL = Uri.parse(await widget.storageRef.child(imageURL).getDownloadURL());
-    return profilePicURL;
-  }
+        });
+
+      } catch (e) {
+        debugPrint(e.toString());
+        return Expanded(child: Text("Grid Builder error occured"));
+      }
+    } else if (traineeMap.isEmpty){
+      return  Expanded(child: Text("No trainee profiles added yet"));
+    } else {
+      return Expanded(child: Text("Error occured"));
+    }
+}
 
   Widget buildProfilePicture(Trainee profilePicture){
     try {
@@ -254,10 +290,10 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             ),
             OutlinedButton(
                 onPressed: () async {
-                  newTraineeProfile.id = await widget.db.collection("trainee").doc().id;
+                  newTraineeProfile.id = await GlobalData.db.collection("trainee").doc().id;
                   newTraineeProfile.saveToFirestore().whenComplete(() =>
-                      Navigator.of(context).pop());
-
+                      Navigator.of(context).pop()
+                  );
                   //TODO add to local list
                 },
                 child: const Text("Save"))

@@ -1,13 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
 
+import 'Data/globalData.dart';
 import 'Data/training.dart';
 
 class TraineeProfile extends StatefulWidget {
   TraineeProfile({super.key, required this.trainee});
-
   Trainee trainee;
 
   @override
@@ -19,8 +20,7 @@ class _TraineeProfile extends State<TraineeProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-              "${widget.trainee.nameFirst!} ${widget.trainee.nameMiddle!.substring(0, 1)}. ${widget.trainee.nameLast!}"),
+          title: buildFullName(),
           actions: [
             IconButton.filledTonal(
                 onPressed: () {
@@ -31,79 +31,7 @@ class _TraineeProfile extends State<TraineeProfile> {
             SizedBox(width: 10,)
           ],
         ),
-        body: Container(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width/29),
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      flex: 8,
-                      child: buildProfilePicture(widget.trainee)
-                  ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                      flex: 18,
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                buildNameRow(
-                                    "First Name", widget.trainee.nameFirst),
-                                SizedBox(width: 10),
-                                buildNameRow(
-                                    "Middle Name", widget.trainee.nameMiddle),
-                                SizedBox(width: 10),
-                                buildNameRow(
-                                    "Last Name", widget.trainee.nameLast),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                buildOccupationRow(
-                                    "Position", widget.trainee.position),
-                                SizedBox(width: 10),
-                                buildOccupationRow(
-                                    "Office", widget.trainee.office?.name)
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                buildAgeReligionRow("Birthdate", DateFormat.yMMMMd().format(widget.trainee.birthdate!)),
-                                const SizedBox(width: 10,),
-                                buildAgeReligionRow("Age", "${DateTime.now().difference(widget.trainee.birthdate!).inDays/365.floor()}"),
-                                const SizedBox(width: 10,),
-                                buildAgeReligionRow("Religion", widget.trainee.religion)
-                              ],
-                            )
-                          ],
-                        ),
-                      )),
-                ],
-              ),
-              Row(
-                children: [
-                  buildContactRow("Personal Email", widget.trainee.emailPersonal),
-                  SizedBox(width: 10,),
-                  buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
-                ],
-              ),
-              Row(
-                children: [
-                  buildContactRow("Official Email", widget.trainee.emailOfficial),
-                  SizedBox(width: 10,),
-                  buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
-                ],
-              ),
-              const SizedBox(height: 10,),
-              buildTrainingsList(widget.trainee.trainings, context)
-            ],
-          ),
-        ),
+        body: traineeProfileStream(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             //code for new training dialog
@@ -111,6 +39,110 @@ class _TraineeProfile extends State<TraineeProfile> {
           child: const Icon(Icons.add),
         ),
     );
+  }
+
+  Widget traineeProfileStream() {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: GlobalData.db.collection('trainee').doc(widget.trainee.id).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return buildTraineeProfile();
+          }
+        }
+    );
+  }
+
+  Widget buildTraineeProfile() {
+    return Container(
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width/29),
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  flex: 8,
+                  child: buildProfilePicture(widget.trainee)
+              ),
+              Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                  flex: 18,
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            buildNameRow(
+                                "First Name", widget.trainee.nameFirst),
+                            SizedBox(width: 10),
+                            buildNameRow(
+                                "Middle Name", widget.trainee.nameMiddle),
+                            SizedBox(width: 10),
+                            buildNameRow(
+                                "Last Name", widget.trainee.nameLast),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            buildOccupationRow(
+                                "Position", widget.trainee.position),
+                            SizedBox(width: 10),
+                            buildOccupationRow(
+                                "Office", widget.trainee.office?.name)
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            buildAgeReligionRow("Birthdate", DateFormat.yMMMMd().format(widget.trainee.birthdate!)),
+                            const SizedBox(width: 10,),
+                            buildAgeReligionRow("Age", "${DateTime.now().difference(widget.trainee.birthdate!).inDays/365.floor()}"),
+                            const SizedBox(width: 10,),
+                            buildAgeReligionRow("Religion", widget.trainee.religion)
+                          ],
+                        )
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+          Row(
+            children: [
+              buildContactRow("Personal Email", widget.trainee.emailPersonal),
+              SizedBox(width: 10,),
+              buildContactRow("Contact Number: Primary", widget.trainee.contactNumber1)
+            ],
+          ),
+          Row(
+            children: [
+              buildContactRow("Official Email", widget.trainee.emailOfficial),
+              SizedBox(width: 10,),
+              buildContactRow("Contact Number: Secondary", widget.trainee.contactNumber2)
+            ],
+          ),
+          const SizedBox(height: 10,),
+          buildTrainingsList(widget.trainee.trainings, context)
+        ],
+      ),
+    );
+  }
+
+  Widget buildFullName() {
+    try {
+      if (widget.trainee.nameMiddle == null) {
+        return Text("${widget.trainee.nameFirst} ${widget.trainee.nameLast}");
+      } else {
+        return Text("${widget.trainee.nameFirst} ${widget.trainee.nameMiddle!.substring(0, 1)}. ${widget.trainee.nameLast}");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return Text("Cannot build Full Name");
+    }
   }
 
   Widget buildProfilePicture(Trainee profilePicture){

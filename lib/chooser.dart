@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'Data/globalData.dart';
 import 'Data/system.dart';
 
 class Chooser extends StatefulWidget {
@@ -14,11 +11,6 @@ class Chooser extends StatefulWidget {
 }
 
 class _Chooser extends State<Chooser> {
-  // Get a non-default Storage bucket
-  final storageRef = GlobalData.storageRef;
-
-  //Firebase Firestore Database
-  final db = GlobalData.db;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +47,7 @@ class _Chooser extends State<Chooser> {
                       child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
                           onTap: () {
-                            systemList[index].navigateToSystem(context, db, storageRef);
+                            systemList[index].navigateToSystem(context);
                             debugPrint('Card tapped.');
                           },
                           child: Padding(
@@ -101,8 +93,7 @@ class _Chooser extends State<Chooser> {
                     child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
                         onTap: () {
-                          systemList[index].navigateToSystem(context, db, storageRef);
-                          debugPrint('Card tapped.');
+                          systemList[index].navigateToSystem(context);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(5.0),
