@@ -4,28 +4,6 @@ enum CompetencySkill {
   DataAnalysis,
 }
 
-extension CompetencySkillExtension on CompetencySkill {
-  String toMap() {
-    return this
-        .toString()
-        .split('.')
-        .last;
-  }
-
-  static CompetencySkill fromString(String skill) {
-    switch (skill) {
-      case 'DataManagement':
-        return CompetencySkill.DataManagement;
-      case 'Surveillance':
-        return CompetencySkill.Surveillance;
-      case 'DataAnalysis':
-        return CompetencySkill.DataAnalysis;
-      default:
-        throw ArgumentError('Unknown CompetencySkill: $skill');
-    }
-  }
-}
-
 enum WorkAssignment {
   sample1,
   sample2
@@ -76,4 +54,26 @@ enum InstitutionType {
   hospital,
   socialHygieneClinic,
   healthCenter
+}
+
+extension CompetencySkillExtension on CompetencySkill {
+  String toMap() {
+    return this
+        .toString()
+        .split('.')
+        .last;
+  }
+
+  static CompetencySkill fromString(String skill) {
+    switch (skill) {
+      case 'DataManagement':
+        return CompetencySkill.DataManagement;
+      case 'Surveillance':
+        return CompetencySkill.Surveillance;
+      case 'DataAnalysis':
+        return CompetencySkill.DataAnalysis;
+      default:
+        throw ArgumentError('Unknown CompetencySkill: $skill');
+    }
+  }
 }

@@ -31,7 +31,12 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         debugPrint("GlobalData: ${GlobalData.traineeMap.keys.toString()}");
       });
     });
-    GlobalData.listenToTraineeUpdates();
+    GlobalData.listenToTraineeUpdates().whenComplete(() {
+      setState(() {
+        buildDirectoryGrid();
+        debugPrint("Global Data: Listening to updates.");
+      });
+    });
     super.initState();
   }
 
@@ -92,6 +97,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
+            debugPrint("Updates returned");
             return buildDirectoryGrid();
           }
         }
@@ -101,55 +107,59 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   Widget buildDirectoryGrid() {
     if (traineeMap.isNotEmpty) {
       try {
-        return GridView.builder(
-          padding: EdgeInsets.all(15.0),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio: 2.0,
-          ),
-          itemCount: traineeMap.length,
-          itemBuilder: (BuildContext, index) {
-            return Card(
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  traineeMap.values.elementAt(index).showProfile(context);
-                    debugPrint(traineeMap.values.elementAt(index).toString());
-                    debugPrint('Directory Card tapped.');
-                },
-                child: Center(
-                  child: SizedBox.expand(
-                    child: Row (
-                      children: [
-                        Spacer(
-                          flex: 1,
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child:
-                            buildProfilePicture(traineeMap.values.elementAt(index))
-                        ),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        Expanded(
-                        flex: 9,
-                        child: AutoSizeText(
-                          maxLines: 3,
-                          minFontSize: 12,
-                          softWrap: true,
-                          wrapWords: true,
-                          "${traineeMap.values.elementAt(index).nameFirst} ${traineeMap.values.elementAt(index).nameMiddle?.substring(0,1)}. ${traineeMap.values.elementAt(index).nameLast}"
-                          )
-                        ),
-                      ],
-                    )
-                  ),
-                ),
+        return StatefulBuilder(
+            builder:(BuildContext context, StateSetter setState) {
+            return GridView.builder(
+              padding: EdgeInsets.all(15.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                childAspectRatio: 2.0,
               ),
-            );
-        });
+              itemCount: traineeMap.length,
+              itemBuilder: (BuildContext, index) {
+                return Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      traineeMap.values.elementAt(index).showProfile(context);
+                        debugPrint(traineeMap.values.elementAt(index).toString());
+                        debugPrint('Directory Card tapped.');
+                    },
+                    child: Center(
+                      child: SizedBox.expand(
+                        child: Row (
+                          children: [
+                            Spacer(
+                              flex: 1,
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child:
+                                buildProfilePicture(traineeMap.values.elementAt(index))
+                            ),
+                            Spacer(
+                              flex: 1,
+                            ),
+                            Expanded(
+                            flex: 9,
+                            child: AutoSizeText(
+                              maxLines: 3,
+                              minFontSize: 12,
+                              softWrap: true,
+                              wrapWords: true,
+                              "${traineeMap.values.elementAt(index).nameFirst} ${traineeMap.values.elementAt(index).nameMiddle?.substring(0,1)}. ${traineeMap.values.elementAt(index).nameLast}"
+                              )
+                            ),
+                          ],
+                        )
+                      ),
+                    ),
+                  ),
+                );
+            });
+          }
+        );
 
       } catch (e) {
         debugPrint(e.toString());

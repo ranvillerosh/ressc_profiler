@@ -31,8 +31,8 @@ class GlobalData with ChangeNotifier{
     }
   }
 
-  static void listenToTraineeUpdates() {
-    FirebaseFirestore.instance.collection("trainee").snapshots().listen((querySnapshot) {
+  static Future<void> listenToTraineeUpdates() async {
+    db.collection("trainee").snapshots().listen((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         Trainee trainee = Trainee.fromFirestore(result);
         _traineeMap[trainee.id!] = trainee;
