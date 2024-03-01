@@ -23,9 +23,6 @@ class Trainee with ChangeNotifier {
   Office? office;
   List<TrainingBatch>? trainings;
 
-  List<Trainee> _traineeList = [];
-  List<Trainee> get traineeList => _traineeList;
-
   Trainee(
       this.nameFirst,
       this.nameMiddle,
@@ -40,6 +37,23 @@ class Trainee with ChangeNotifier {
       this.religion,
       this.office,
       this.trainings);
+
+  Trainee.fromDirectory(
+      this.nameFirst,
+      this.nameMiddle,
+      this.nameLast,
+      this.position,
+      this.birthdate,
+      this.contactNumber1,
+      this.contactNumber2,
+      this.emailPersonal,
+      this.emailOfficial,
+      this.profilePicture,
+      this.religion,
+      this.office,
+      this.id,
+      this.trainings
+      );
 
   Trainee.fromDB({
     this.nameFirst,
@@ -62,7 +76,7 @@ class Trainee with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => TraineeProfile(
-                  trainee: this,
+                  traineeOnFocus: this,
                 )));
   }
 

@@ -18,7 +18,7 @@ class GlobalData with ChangeNotifier{
 
   //Firebase Firestore Database
   static final db = FirebaseFirestore.instance;
-
+  //One-time fetch
   static Future<void> fetchTrainees() async {
     try {
       final snapshot = await db.collection("trainee").get();
@@ -31,7 +31,8 @@ class GlobalData with ChangeNotifier{
     }
   }
 
-  static Future<void> listenToTraineeUpdates() async {
+  //fetch all trainees with realtime updates
+  static Future<void> listenAllToTraineeUpdates() async {
     db.collection("trainee").snapshots().listen((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         Trainee trainee = Trainee.fromFirestore(result);
@@ -39,5 +40,7 @@ class GlobalData with ChangeNotifier{
       });
     });
   }
+
+  //fetch single trainee data with realtime updates
 }
 

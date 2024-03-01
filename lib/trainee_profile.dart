@@ -8,14 +8,24 @@ import 'Data/globalData.dart';
 import 'Data/training.dart';
 
 class TraineeProfile extends StatefulWidget {
-  TraineeProfile({super.key, required this.trainee});
-  Trainee trainee;
+  TraineeProfile({super.key, required Trainee traineeOnFocus});
 
+  Trainee? traineeOnFocus;
+  Trainee get trainee => traineeOnFocus!;
   @override
   State<TraineeProfile> createState() => _TraineeProfile();
 }
 
 class _TraineeProfile extends State<TraineeProfile> {
+  @override
+  void initState()
+  {
+    debugPrint(widget.trainee.id.toString());
+    //fetch single trainee data with realtime updates
+    listenToTraineeUpdates();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,6 +234,12 @@ class _TraineeProfile extends State<TraineeProfile> {
         child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
       );
     }
+  }
+
+  Future<void> listenToTraineeUpdates() async {
+    GlobalData.db.collection("trainee").doc(widget.trainee.id).snapshots().listen((querySnapshot) {
+      widget.traineeOnFocus = Trainee.fromFirestore(querySnapshot);
+    });
   }
 
   Future<void> _showTrainingDetailsDialog(TrainingBatch trainingBatch, BuildContext context) async {

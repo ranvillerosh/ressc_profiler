@@ -20,7 +20,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   bool shadowColor = false;
   double? scrolledUnderElevation;
   Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
-  Map<String, Trainee> traineeMap = {};
+  Map<String, Trainee> get traineeMap => GlobalData.traineeMap;
 
   @override
   void initState()
@@ -31,9 +31,9 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         debugPrint("GlobalData: ${GlobalData.traineeMap.keys.toString()}");
       });
     });
-    GlobalData.listenToTraineeUpdates().whenComplete(() {
+    GlobalData.listenAllToTraineeUpdates().whenComplete(() {
       setState(() {
-        buildDirectoryGrid();
+        // traineeMap;
         debugPrint("Global Data: Listening to updates.");
       });
     });
@@ -124,7 +124,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     onTap: () {
                       traineeMap.values.elementAt(index).showProfile(context);
                         debugPrint(traineeMap.values.elementAt(index).toString());
-                        debugPrint('Directory Card tapped.');
+                        debugPrint(traineeMap.values.elementAt(index).toMap().toString());
                     },
                     child: Center(
                       child: SizedBox.expand(
