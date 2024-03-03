@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ressc_profiler/Data/globalData.dart';
 import 'package:ressc_profiler/Data/training.dart';
 import '../trainee_profile.dart';
 import 'office.dart';
@@ -76,7 +77,7 @@ class Trainee with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => TraineeProfile(
-                  traineeOnFocus: this,
+              trainee: this,
                 )));
   }
 
@@ -84,7 +85,7 @@ class Trainee with ChangeNotifier {
   Future<void> saveToFirestore() async {
     try {
       // Get a reference to the Firestore collection
-      DocumentReference trainees = FirebaseFirestore.instance.collection("trainee").doc(id);
+      DocumentReference trainees = GlobalData.db.collection("trainee").doc(id);
 
       // Convert Trainee object to a Map
       Map<String, dynamic> traineeData = {
@@ -109,6 +110,10 @@ class Trainee with ChangeNotifier {
     } catch (e) {
       print('Error saving to Firestore: $e');
     }
+  }
+
+  Future<void> saveEditsToFireStore() async {
+    GlobalData.db.collection("trainee").doc(id).set(this.toMap(), SetOptions(merge: true));
   }
 
   factory Trainee.fromFirestore(

@@ -32,7 +32,7 @@ class GlobalData with ChangeNotifier{
   }
 
   //fetch all trainees with realtime updates
-  static Future<void> listenAllToTraineeUpdates() async {
+  static Future<void> listenToAllTraineeUpdates() async {
     db.collection("trainee").snapshots().listen((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         Trainee trainee = Trainee.fromFirestore(result);
@@ -40,7 +40,5 @@ class GlobalData with ChangeNotifier{
       });
     });
   }
-
-  //fetch single trainee data with realtime updates
 }
 

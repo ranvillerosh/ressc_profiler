@@ -31,7 +31,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         debugPrint("GlobalData: ${GlobalData.traineeMap.keys.toString()}");
       });
     });
-    GlobalData.listenAllToTraineeUpdates().whenComplete(() {
+    GlobalData.listenToAllTraineeUpdates().whenComplete(() {
       setState(() {
         // traineeMap;
         debugPrint("Global Data: Listening to updates.");
@@ -65,7 +65,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                 title: Text("Add New Trainee Profile"),
                 onTap: () {
                   _addNewTraineeProfileDialog(context);
-                }, //TODO add new trainee
+                },
               ),
             ),
             Card(
@@ -97,7 +97,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            debugPrint("Updates returned");
             return buildDirectoryGrid();
           }
         }
@@ -304,7 +303,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                   newTraineeProfile.saveToFirestore().whenComplete(() =>
                       Navigator.of(context).pop()
                   );
-                  //TODO add to local list
                 },
                 child: const Text("Save"))
           ],

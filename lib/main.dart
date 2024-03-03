@@ -19,7 +19,7 @@ Future<void> main() async {
       runApp(const Login());
     } else {
       runApp(
-          MaterialApp(
+          const MaterialApp(
               debugShowCheckedModeBanner: false,
               home: Chooser(title: "RESSC Portal")
           )
@@ -166,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             } finally {
                               if (FirebaseAuth.instance.currentUser != null) {
                                 _navigateToChooser(context);
+                                Navigator.of(context).pop();
                               }
                             }
                           },
@@ -190,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text(
                     'Only authorized personnel are given access to this system'),
                 Text(
-                    'Please ask Ms. Victoria L. Malicdan for permission to utilize this system'),
+                    'Please ask Ms. Victoria L. Malicdan for permission to utilize this system and access credentials'),
               ],
             ),
           ),
