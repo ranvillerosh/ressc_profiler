@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/office.dart';
 import 'Data/globalData.dart';
 import 'Data/trainee.dart';
+import 'Data/training.dart';
 
 class RESSCDirectory extends StatefulWidget {
   RESSCDirectory({super.key, required this.title});
@@ -268,7 +269,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     buildContactNumberSecondary("Contact Number: Secondary", newTraineeProfile.contactNumber2)
                   ],
                 ),
-                // buildTrainingsList(trainee.trainings, context)
+                buildTrainingsList(newTraineeProfile.trainings, context)
               ],
             ),
           ),
@@ -547,6 +548,88 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
           ),
         );
       }
+    );
+  }
+
+  Widget buildTrainingsList(List<TrainingBatch>? trainings, BuildContext context) {
+    try {
+      if(trainings!=null && trainings.isNotEmpty) {
+        return Expanded(
+          child: ListView.builder(
+              itemCount: newTraineeProfile.trainings!.length,
+              itemBuilder: (context, index) {
+                return Expanded(
+                  child: Card(
+                    child: InkWell(
+                      onTap: (){
+                        _showTrainingDetailsDialog(trainings[index], context);
+                      },
+                      child: ListTile(
+                        title: Text(newTraineeProfile.trainings![index].training.shortName),
+                        subtitle: Text(newTraineeProfile.trainings![index].training.name),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        );
+      } else if(trainings == null){
+        return const Expanded(
+          child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
+        );
+      } else {
+        return const Expanded(
+          child: Text("No Trainings added yet. Try adding the first one by clicking on the + button"),
+        );
+      }
+    } catch (e) {
+      debugPrint("buildTrainingsList error: ${e.toString()}.");
+      return Expanded(
+        child: Text("Cannot Build Trainings List: ${e.toString()}"),
+      );
+    }
+  }
+
+  Future<void> _showTrainingDetailsDialog(TrainingBatch trainingBatch, BuildContext context) async {
+    var trainingDates = "No training dates set.";
+    var trainingVenue = "No Training Venue specified.";
+    if (trainingBatch.startDate!=null && trainingBatch.endDate!=null) {
+      trainingDates = "${DateFormat.yMMMMd(trainingBatch.startDate)} - ${DateFormat.yMMMMd(trainingBatch.endDate)}";
+    }
+    if (trainingBatch.venue!=null) {
+      trainingVenue = trainingBatch.venue!;
+    }
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(trainingBatch.training.shortName),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(trainingBatch.training.name),
+                Text(trainingDates),
+                Text(trainingVenue)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Show More'),
+              onPressed: () {
+                trainingBatch.training.showTraining(trainingBatch.training, context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

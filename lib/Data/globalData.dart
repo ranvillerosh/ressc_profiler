@@ -10,15 +10,18 @@ import 'office.dart';
 class GlobalData with ChangeNotifier{
   static Map<String, Trainee> _traineeMap = {};
   static Map<String, Trainee> get traineeMap => _traineeMap;
-  static Map<String, Office> officeList = {};
-  static Map<String, Training> trainingList = {};
+  static Map<String, Office> _officeMap = {};
+  static Map<String, Office> get officeMap => _officeMap;
+  static Map<String, Training> _trainingMap = {};
+  static Map<String, Training> get trainingMap => _trainingMap;
 
   // Get a non-default Storage bucket
   static final storageRef = FirebaseStorage.instanceFor(bucket: "gs://doh-chd-car-portal-app.appspot.com").ref();
 
   //Firebase Firestore Database
   static final db = FirebaseFirestore.instance;
-  //One-time fetch
+
+  //One-time fetch all trainees
   static Future<void> fetchTrainees() async {
     try {
       final snapshot = await db.collection("trainee").get();
@@ -39,6 +42,19 @@ class GlobalData with ChangeNotifier{
         _traineeMap[trainee.id!] = trainee;
       });
     });
+  }
+
+  //One-time fetch all trainings
+  static Future<void> fetchTrainings() async {
+    try {
+      final snapshot = await db.collection("training").get();
+      snapshot.docs.forEach((result) {
+        Training training = Training.fromFirestore(result);
+        _trainingMap.[training.id];
+      });
+    } catch (e) {
+      print('Error getting trainees: $e');
+    }
   }
 }
 

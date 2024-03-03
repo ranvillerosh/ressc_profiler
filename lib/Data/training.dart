@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'enum_library.dart';
 
 class Training{
+  String? id;
   String name;
   String shortName;
   String? rationale;
