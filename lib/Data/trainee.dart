@@ -116,7 +116,7 @@ class Trainee with ChangeNotifier {
     GlobalData.db.collection("trainee").doc(id).set(this.toMap(), SetOptions(merge: true));
   }
 
-  factory Trainee.fromFirestore(
+  factory Trainee.fromFireStore(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
     return Trainee.fromDB(

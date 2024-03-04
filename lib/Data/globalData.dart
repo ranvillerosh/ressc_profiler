@@ -26,7 +26,7 @@ class GlobalData with ChangeNotifier{
     try {
       final snapshot = await db.collection("trainee").get();
       snapshot.docs.forEach((result) {
-        Trainee trainee = Trainee.fromFirestore(result);
+        Trainee trainee = Trainee.fromFireStore(result);
         _traineeMap[trainee.id!] = trainee;
       });
     } catch (e) {
@@ -38,7 +38,7 @@ class GlobalData with ChangeNotifier{
   static Future<void> listenToAllTraineeUpdates() async {
     db.collection("trainee").snapshots().listen((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        Trainee trainee = Trainee.fromFirestore(result);
+        Trainee trainee = Trainee.fromFireStore(result);
         _traineeMap[trainee.id!] = trainee;
       });
     });
@@ -49,8 +49,8 @@ class GlobalData with ChangeNotifier{
     try {
       final snapshot = await db.collection("training").get();
       snapshot.docs.forEach((result) {
-        Training training = Training.fromFirestore(result);
-        _trainingMap.[training.id];
+        Training training = Training.fromFireStore(result);
+        _trainingMap[training.id];
       });
     } catch (e) {
       print('Error getting trainees: $e');

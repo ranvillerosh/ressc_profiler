@@ -344,7 +344,7 @@ class _TraineeProfile extends State<TraineeProfile> {
     GlobalData.db.collection("trainee").doc(widget.trainee.id).snapshots().listen((querySnapshot) {
       debugPrint("Now lisetning to: ${widget.trainee.id}");
       setState(() {
-        widget.trainee = Trainee.fromFirestore(querySnapshot);
+        widget.trainee = Trainee.fromFireStore(querySnapshot);
       });
     });
   }

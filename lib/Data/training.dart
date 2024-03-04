@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ressc_profiler/Data/trainee.dart';
 import 'package:ressc_profiler/training_details.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,6 +56,33 @@ class Training{
     this.logoURL,
     this.batchList
 });
+
+  //read data from firestore
+  factory Training.fromFireStore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    return Training.fromDB(
+      name: data?['name'],
+      shortName: data?['shortName'],
+      rationale: data?['rationale'],
+      background: data?['background'],
+      objectives: data?['objectives'] is Iterable
+          ? List.from(data?['objectives']).map((objective) => objective.toString()).toList()
+          : null,
+      competencySkill: data?['competencySkill'] is Iterable
+          ? List.from(data?['competencySkill'])
+          .map((skill) => CompetencySkillExtension.fromString(skill.toString()))
+          .toList()
+          : null,
+      graduatesList: data?['graduatesList'] is Iterable
+          ? List.from(data?['graduatesList']).map((trainee) => Trainee.fromMap(trainee)).toList()
+          : null,
+      logoURL: data?['logoURL'],
+      batchList: data?['batchList'] is Iterable
+          ? List.from(data?['batchList']).map((batch) => TrainingBatch.fromMap(batch)).toList()
+          : null,
+    );
+  }
 
   // Factory method to create Training from a Map
   factory Training.fromMap(Map<String, dynamic> map) {
