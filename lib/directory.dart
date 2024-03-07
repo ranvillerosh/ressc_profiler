@@ -50,8 +50,11 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
         actions: [
+          //TODO Search
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+
+              },
               icon: Icon(Icons.search))
         ],
       ),
@@ -83,10 +86,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       ),
       body: directoryStream(),
     );
-  }
-  Future<Uri> _getProfilePic (String imageURL) async {
-    var profilePicURL = Uri.parse(await GlobalData.storageRef.child(imageURL).getDownloadURL());
-    return profilePicURL;
   }
 
   Widget directoryStream() {
