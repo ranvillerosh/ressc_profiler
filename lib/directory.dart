@@ -89,6 +89,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   }
 
   Widget buildSearch(BuildContext context) {
+    bool isDark = false;
     return SearchAnchor(
         builder: (BuildContext context, SearchController controller) {
           return SearchBar(

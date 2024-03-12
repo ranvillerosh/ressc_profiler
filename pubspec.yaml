@@ -14,7 +14,6 @@ dependencies:
   auto_size_text: ^3.0.0  #add dependency for auto size text
   transparent_image: ^2.0.1 #add transparent image for Fade-in Memory Image
 
-
   firebase_core: ^2.25.4  # add dependency for Firebase Core
   cloud_firestore: ^4.13.6  # add dependency for Cloud Firestore
 
@@ -35,3 +34,8 @@ flutter:
   uses-material-design: true
   assets:
     -  assets/media/
+
+#google_services:
+#  flutter:
+#    plugin_registrant: io.flutter.plugins.firebase.FirebasePluginRegistrant
+#    plugin_version: 4.3.15 # Change the version number here
