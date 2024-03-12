@@ -51,11 +51,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
         actions: [
           //TODO Search
-          IconButton(
-              onPressed: () {
-
-              },
-              icon: Icon(Icons.search))
+          buildSearch(context),
         ],
       ),
       drawer: Drawer(
@@ -103,21 +99,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               controller.openView();
             },
             leading: const Icon(Icons.search),
-            trailing: <Widget>[
-              Tooltip(
-                message: 'Change brightness mode',
-                child: IconButton(
-                  isSelected: isDark,
-                  onPressed: () {
-                    setState(() {
-                      isDark = !isDark;
-                    });
-                  },
-                  icon: const Icon(Icons.wb_sunny_outlined),
-                  selectedIcon: const Icon(Icons.brightness_2_outlined),
-                ),
-              )
-            ],
           );
         }, suggestionsBuilder:
         (BuildContext context, SearchController controller) {
@@ -634,6 +615,11 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         child: Text("Cannot Build Trainings List: ${e.toString()}"),
       );
     }
+  }
+
+  Widget buildTrainingChooser() {
+    return DropdownMenu(
+       dropdownMenuEntries: [],);
   }
 
   Future<void> _showTrainingDetailsDialog(TrainingBatch trainingBatch, BuildContext context) async {
