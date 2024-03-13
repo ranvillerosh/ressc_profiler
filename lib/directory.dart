@@ -50,7 +50,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
         actions: [
-          //TODO Search
           buildSearch(context),
         ],
       ),
@@ -83,12 +82,13 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       body: directoryStream(),
     );
   }
-
+  //TODO Search
   Widget buildSearch(BuildContext context) {
-    bool isDark = false;
+    Map<String, Trainee> searchMap;
     return SearchAnchor(
         builder: (BuildContext context, SearchController controller) {
           return SearchBar(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*2 / 5),
             controller: controller,
             padding: const MaterialStatePropertyAll<EdgeInsets>(
                 EdgeInsets.symmetric(horizontal: 16.0)),
@@ -103,12 +103,12 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         }, suggestionsBuilder:
         (BuildContext context, SearchController controller) {
       return List<ListTile>.generate(5, (int index) {
-        final String item = 'item $index';
+        final String searchCandidate = 'item $index';
         return ListTile(
-          title: Text(item),
+          title: Text(searchCandidate),
           onTap: () {
             setState(() {
-              controller.closeView(item);
+              controller.closeView(searchCandidate);
             });
           },
         );

@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.greenAccent,
           ),
           constraints: BoxConstraints.expand(
-            width: MediaQuery.of(context).size.width / 3,
+            width: MediaQuery.of(context).size.width*3 / 5,
             height:
                 Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 +
                     MediaQuery.of(context).size.height / 2,
@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   .signInWithEmailAndPassword(
                                       email: userEmail!,
                                       password: userPassword!);
-                                        debugPrint("Logging in");
+                              debugPrint("Logging in");
                             } on FirebaseAuthException catch (e) {
                               if (e.code == "user-not-found") {
                                 _userNotFoundToast(context);
