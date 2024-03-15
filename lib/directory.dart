@@ -29,7 +29,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     GlobalData.fetchTrainees().whenComplete(() {
       setState(() {
         traineeMap.addAll(GlobalData.traineeMap);
-        debugPrint("GlobalData: ${GlobalData.traineeMap.keys.toString()}");
       });
     });
     GlobalData.listenToAllTraineeUpdates().whenComplete(() {
@@ -150,8 +149,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       traineeMap.values.elementAt(index).showProfile(context);
-                        debugPrint(traineeMap.values.elementAt(index).toString());
-                        debugPrint(traineeMap.values.elementAt(index).toMap().toString());
                     },
                     child: Center(
                       child: SizedBox.expand(

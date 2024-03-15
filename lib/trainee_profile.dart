@@ -19,13 +19,10 @@ class TraineeProfile extends StatefulWidget {
 class _TraineeProfile extends State<TraineeProfile> {
   Trainee get trainee => widget.trainee;
 
-  //Trainee("nameFirst", "nameMiddle", "nameLast","Position", null, "contactNumber1", "contactNumber2", "emailPersonal", "emailOfficial",  "Placeholders/profilePicturePlaceHolder.jpg","Religion", null, null);
-
   @override
   void initState()
   {
     listenToTraineeProfile();
-    debugPrint("Trainee ID: ${trainee.id}");
     super.initState();
   }
 
@@ -256,6 +253,7 @@ class _TraineeProfile extends State<TraineeProfile> {
       debugPrint("buildBirthdayRow error: ${e.toString()}.");
       return Expanded(
         child: TextFormField(
+          readOnly: true,
           initialValue: "No Birthdate Set",
           decoration: InputDecoration(labelText: label),
         ),
@@ -267,7 +265,8 @@ class _TraineeProfile extends State<TraineeProfile> {
     try {
       return Expanded(
         child: TextFormField(
-          initialValue: "${DateTime.now().difference(birthdate!).inDays/365.floor()}",
+          readOnly: true,
+          initialValue: "${(DateTime.now().difference(birthdate!).inDays/365).floor()}",
           decoration: InputDecoration(labelText: label),
         ),
       );
@@ -275,6 +274,7 @@ class _TraineeProfile extends State<TraineeProfile> {
       debugPrint("buildAgeRow error: ${e.toString()}.");
       return Expanded(
         child: TextFormField(
+          readOnly: true,
           initialValue: "~",
           decoration: InputDecoration(labelText: label),
         ),
@@ -286,6 +286,7 @@ class _TraineeProfile extends State<TraineeProfile> {
     try {
       return Expanded(
         child: TextFormField(
+          readOnly: true,
           initialValue: initialValue,
           decoration: InputDecoration(labelText: label),
         ),
@@ -294,6 +295,7 @@ class _TraineeProfile extends State<TraineeProfile> {
       debugPrint("buildReligionRow error: ${e.toString()}.");
       return Expanded(
         child: TextFormField(
+          readOnly: true,
           initialValue: null,
           decoration: InputDecoration(labelText: label),
         ),

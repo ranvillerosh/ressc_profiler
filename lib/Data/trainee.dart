@@ -101,8 +101,8 @@ class Trainee with ChangeNotifier {
         'emailOfficial': emailOfficial,
         'profilePicture': profilePicture,
         'religion': religion,
-        'office': office?.toMap(), // Assuming Office has a toMap method
-        'trainings': trainings?.map((training) => training.toMap()).toList(), // Assuming TrainingBatch has a toMap method
+        'office': office?.toMap(),
+        'trainings': trainings?.map((training) => training.toMap()).toList(),
       };
 
       // Add the Trainee data to Firestore
@@ -124,6 +124,7 @@ class Trainee with ChangeNotifier {
       nameMiddle: data?["nameMiddle"],
       nameLast: data?["nameLast"],
       position: data?["position"],
+      birthdate: data?['birthdate'] != null ? ((data!["birthdate"] as Timestamp).toDate()) : null,
       contactNumber1: data?["contactNumber1"],
       contactNumber2: data?["contactNumber2"],
       emailPersonal: data?["emailPersonal"],
@@ -147,7 +148,7 @@ class Trainee with ChangeNotifier {
       'nameMiddle': nameMiddle,
       'nameLast': nameLast,
       'position': position,
-      'birthdate': birthdate?.toIso8601String(),
+      'birthdate': birthdate,
       'contactNumber1': contactNumber1,
       'contactNumber2': contactNumber2,
       'emailPersonal': emailPersonal,
@@ -166,7 +167,7 @@ class Trainee with ChangeNotifier {
       nameMiddle: map['nameMiddle'],
       nameLast: map['nameLast'],
       position: map['position'],
-      birthdate: map['birthdate'] != null ? DateTime.parse(map['birthdate']) : null,
+      birthdate: map['birthdate'] != null ? (map["birthdate"] as Timestamp).toDate() : null,
       contactNumber1: map['contactNumber1'],
       contactNumber2: map['contactNumber2'],
       emailPersonal: map['emailPersonal'],
@@ -183,8 +184,8 @@ class Trainee with ChangeNotifier {
 
   computeAge() {
     try {
-      var computedAge = DateTime.now().difference(birthdate!).inDays/365.floor();
-      _age = computedAge.toInt();
+      var computedAge = (DateTime.now().difference(birthdate!).inDays/365).floor();
+      _age = computedAge;
       debugPrint("printing computed age ${age.toString()} ${_age.toString()}");
       notifyListeners();
     } catch (e) {

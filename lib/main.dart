@@ -57,11 +57,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _passwordVisibility = false;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    String? userEmail;
-    String? userPassword;
+    // String? userEmail;
+    // String? userPassword;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -103,9 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintText: 'Please enter your username',
                   labelText: 'Username',
                 ),
-                onChanged: (String? valueUsername) {
-                  userEmail = valueUsername;
-                },
+                controller: emailController,
+                // onChanged: (String? valueUsername) {
+                //   userEmail = valueUsername;
+                // },
                 //validator adds validation function
                 validator: (String? value) {
                   return (value != null && value.contains('@'))
@@ -122,16 +125,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   suffixIcon: IconButton(
                     onPressed: () => setState(() {
                       _passwordVisibility = !_passwordVisibility;
-                      userPassword = TextEditingValue as String?;
                     }),
                     icon: Icon(_passwordVisibility
                         ? Icons.visibility_off
                         : Icons.visibility),
                   ),
                 ),
-                onChanged: (String? valueUserpassword) {
-                  userPassword = valueUserpassword;
-                },
+                controller: passwordController,
+                // onChanged: (String? valueUserpassword) {
+                //   userPassword = valueUserpassword;
+                // },
               ),
               const Padding(padding: EdgeInsets.all(5)),
               Row(
@@ -152,8 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               _loginToast(context);
                               await FirebaseAuth.instance
                                   .signInWithEmailAndPassword(
-                                      email: userEmail!,
-                                      password: userPassword!);
+                                      email: emailController.text,
+                                      password: passwordController.text);
                               debugPrint("Logging in");
                             } on FirebaseAuthException catch (e) {
                               if (e.code == "user-not-found") {
