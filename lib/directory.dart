@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ressc_profiler/Data/office.dart';
+import 'package:search_page/search_page.dart';
 import 'Data/globalData.dart';
 import 'Data/trainee.dart';
 import 'Data/training.dart';
@@ -22,6 +23,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   double? scrolledUnderElevation;
   Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
   Map<String, Trainee> get traineeMap => GlobalData.traineeMap;
+  List get traineeList => GlobalData.traineeMap.values.toList();
 
   @override
   void initState()
@@ -113,6 +115,20 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         );
       });
     });
+  }
+
+  Future buildSearchTwo(BuildContext context) {
+    return showSearch(
+        context: context,
+        delegate: SearchPage(
+            builder: (trainee) => ,
+            filter: (trainee) => [
+              trainee.nameFirst,
+              trainee.nameMiddle,
+              trainee.nameLast,
+              trainee.trainings.join
+            ],
+            items: traineeList));
   }
 
   Widget directoryStream() {
