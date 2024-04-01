@@ -51,7 +51,13 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
         actions: [
-          buildSearch(context),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton.outlined(
+                onPressed: () => buildSearch(context),
+                icon: const Icon(Icons.search)
+            ),
+          ),
         ],
       ),
       drawer: Drawer(
@@ -84,49 +90,19 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
   //TODO Search
-  Widget buildSearch(BuildContext context) {
-    Map<String, Trainee> searchMap;
-    return SearchAnchor(
-        builder: (BuildContext context, SearchController controller) {
-          return SearchBar(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*2 / 5),
-            controller: controller,
-            padding: const MaterialStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 16.0)),
-            onTap: () {
-              controller.openView();
-            },
-            onChanged: (_) {
-              controller.openView();
-            },
-            leading: const Icon(Icons.search),
-          );
-        }, suggestionsBuilder:
-        (BuildContext context, SearchController controller) {
-      return List<ListTile>.generate(5, (int index) {
-        final String searchCandidate = 'item $index';
-        return ListTile(
-          title: Text(searchCandidate),
-          onTap: () {
-            setState(() {
-              controller.closeView(searchCandidate);
-            });
-          },
-        );
-      });
-    });
-  }
-
-  Future buildSearchTwo(BuildContext context) {
+  Future buildSearch(BuildContext context) {
     return showSearch(
         context: context,
         delegate: SearchPage(
-            builder: (trainee) => ,
+            builder: (trainee) => ListTile(
+              title: Text("${trainee.nameFirst} ${trainee.nameMiddle!.substring(0, 1)}. ${trainee.nameLast}"),
+              subtitle: Text("${trainee.position}"),
+            ),
             filter: (trainee) => [
               trainee.nameFirst,
               trainee.nameMiddle,
               trainee.nameLast,
-              trainee.trainings.join
+              // trainee.trainings.join(),
             ],
             items: traineeList));
   }
@@ -630,11 +606,6 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     }
   }
 
-  Widget buildTrainingChooser() {
-    return DropdownMenu(
-       dropdownMenuEntries: [],);
-  }
-
   Future<void> _showTrainingDetailsDialog(TrainingBatch trainingBatch, BuildContext context) async {
     var trainingDates = "No training dates set.";
     var trainingVenue = "No Training Venue specified.";
@@ -676,5 +647,9 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
         );
       },
     );
+  }
+
+  Future<void> _addNewTrainingDialog() async {
+
   }
 }
