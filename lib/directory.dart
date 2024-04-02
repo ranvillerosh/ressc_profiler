@@ -99,10 +99,10 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               subtitle: Text("${trainee.position}"),
             ),
             filter: (trainee) => [
-              trainee.nameFirst,
-              trainee.nameMiddle,
-              trainee.nameLast,
-              // trainee.trainings.join(),
+              trainee?.nameFirst,
+              trainee?.nameMiddle,
+              trainee?.nameLast,
+              trainee?.trainings?.join(),
             ],
             items: traineeList));
   }
