@@ -24,6 +24,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
   Trainee newTraineeProfile = Trainee(null, null,null, null, null, null, null, null, null, null, null, null, null);
   Map<String, Trainee> get traineeMap => GlobalData.traineeMap;
   List get traineeList => GlobalData.traineeMap.values.toList();
+  Training newTraining  = Training("Short Title", "Full, Expanded Title");
 
   @override
   void initState()
@@ -649,7 +650,218 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Future<void> _addNewTrainingDialog() async {
+  Future<void> _addNewTrainingDialog(Training newTraining) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog (
+          title: Text('Add New Trainee Profile'),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildTrainingHeader(context, newTraining),
+                  buildTrainingBackground(newTraining),
+                  buildTrainingRationale(newTraining),
+                  ListTile(
+                    title: Text("Objectives"),
+                    subtitle: buildTrainingObjectives(newTraining),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            Card(
+              child: InkWell(
+                onTap: () {
+                  //TODO add training chooser
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add_circle_sharp),
+                      Text("Add Training(s)")
+                    ],
+                  ),
+                ),
+              ),
 
+            ),
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            OutlinedButton(
+                onPressed: () async {
+                  newTraineeProfile.id = await GlobalData.db.collection("trainee").doc().id;
+                  newTraineeProfile.saveToFirestore().whenComplete(() =>
+                      Navigator.of(context).pop()
+                  );
+                },
+                child: const Text("Save"))
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildTrainingHeader(BuildContext context, Training training){
+    return StatefulBuilder(
+        builder:(BuildContext context, StateSetter setState) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.elliptical(MediaQuery.of(context).size.width * 0.5, 100),
+                        bottomRight: Radius.elliptical(MediaQuery.of(context).size.width * 0.5, 100)
+                    )
+                ),
+                //TODO image carousel (photo doc)
+                // image: ,  //Nada yet
+              ),
+              Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: buildTrainingLogo(training.logoURL),
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
+
+  Widget buildTrainingLogo(String? trainingLogoURL ) {
+    if (trainingLogoURL != null) {
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.3,
+        height: MediaQuery.of(context).size.width * 0.3,
+        child: Expanded(
+          child: Stack(
+            children: [
+              // TODO change more appropriate image asset
+              CircleAvatar(
+                radius: MediaQuery.of(context).size.width * 0.25,
+                child: ClipOval(
+                  child: FadeInImage.assetNetwork(
+                      placeholder: "assets/media/training_icon.png",
+                      image:
+                      trainingLogoURL),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                  icon: Icon(Icons.mode_edit_outlined),
+                  onPressed: () {  }, //TODO Uplaod Logo Function
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.3,
+        height: MediaQuery.of(context).size.width * 0.3,
+        child: Expanded(
+          child: Stack(
+            children: [
+              // TODO change more appropriate image asset
+              CircleAvatar(
+                radius: MediaQuery.of(context).size.width * 0.25,
+                child: ClipOval(
+                  child: Image.asset("assets/media/training_icon.png"),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                  icon: Icon(Icons.mode_edit_outlined),
+                  onPressed: () {  }, //TODO Uplaod Logo Function
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget buildTrainingRationale(Training training) {
+    var rationale = "No training rationale set.";
+    if (training.rationale != null) {
+      rationale = training.rationale!;
+    }
+
+    return ListTile(
+      title: const Text("Rationale"),
+      subtitle: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text(rationale),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTrainingBackground(Training training) {
+    var background = "No training background set.";
+    if (training.background != null) {
+      background = training.background!;
+    }
+
+    return ListTile(
+      title: const Text("Background"),
+      subtitle: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text(background),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTrainingObjectives(Training training) {
+
+    if (training.objectives != null && training.objectives!.isNotEmpty) {
+      return Expanded(
+        child: ListView.builder(
+          itemCount: training.objectives!.length,
+          itemBuilder: (context, index) {
+            return Expanded(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(training.objectives![index]),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return const Expanded(
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Text("No objectives set."),
+            ),
+          )
+      );
+
+    }
   }
 }
