@@ -131,6 +131,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         : Icons.visibility),
                   ),
                 ),
+                onFieldSubmitted: (value) async {
+                  try {
+                    _loginToast(context);
+                    await FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text);
+                    debugPrint("Logging in");
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == "user-not-found") {
+                      _userNotFoundToast(context);
+                      debugPrint("User not found");
+                    } else if (e.code == "wrong-password") {
+                      _wrongPasswordToast(context);
+                      debugPrint("Wrong password");
+                    }
+                  } finally {
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      _navigateToChooser(context);
+                      Navigator.of(context).pop();
+                    }
+                  }
+                },
                 controller: passwordController,
                 // onChanged: (String? valueUserpassword) {
                 //   userPassword = valueUserpassword;

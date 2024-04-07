@@ -90,7 +90,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
       body: directoryStream(),
     );
   }
-  //TODO Search
+
   Future buildSearch(BuildContext context) {
     return showSearch(
         context: context,
@@ -98,6 +98,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             builder: (trainee) => ListTile(
               title: Text("${trainee.nameFirst} ${trainee.nameMiddle!.substring(0, 1)}. ${trainee.nameLast}"),
               subtitle: Text("${trainee.position}"),
+              onTap: () => trainee.showProfile(context),
             ),
             filter: (trainee) => [
               trainee?.nameFirst,
