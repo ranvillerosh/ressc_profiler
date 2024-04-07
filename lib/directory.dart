@@ -744,6 +744,39 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
+  Widget buildTrainingName (Training training) {
+    return  StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: "Title",
+                  hintText: "Enter Full Training Title here",
+                ),
+                onChanged: (String? newValue){
+                  setState(() {
+                    newTraining.name = newValue.toString();
+                  });
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: "Short Name",
+                  hintText: "Enter Training Short Title here",
+                ),
+                onChanged: (String? newValue){
+                  setState(() {
+                    newTraining.shortName = newValue.toString();
+                  });
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
   Widget buildTrainingLogo(String? trainingLogoURL ) {
     if (trainingLogoURL != null) {
       return Container(
