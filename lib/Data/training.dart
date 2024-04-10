@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'enum_library.dart';
+import 'globalData.dart';
 
 class Training{
   String? id;
@@ -24,7 +25,6 @@ class Training{
       );
 
   void showTraining(Training training, BuildContext context) {
-    var training = Training("Sample Disease Surveillance and Data Management Training 3","SDSDMT 3");
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -43,6 +43,22 @@ class Training{
       'logoURL': logoURL,
       'batchList': batchList?.map((batch) => batch.toMap()).toList(),
     }..removeWhere((key, value) => value == null);
+  }
+
+  // Method to save Trainee data to Firestore
+  Future<void> saveToFirestore() async {
+    try {
+      // Get a reference to the Firestore collection
+      DocumentReference training = GlobalData.db.collection("training").doc(id);
+
+      // Convert Trainee object to a Map
+      Map<String, dynamic> trainingData = this.toMap();
+
+      // Add the Trainee data to Firestore
+      await training.set(trainingData, SetOptions(merge: true));
+    } catch (e) {
+      print('Error saving training to Firestore: $e');
+    }
   }
 
   Training.fromDB({

@@ -108,7 +108,7 @@ class Trainee with ChangeNotifier {
       // Add the Trainee data to Firestore
       await trainees.set(traineeData, SetOptions(merge: true));
     } catch (e) {
-      print('Error saving to Firestore: $e');
+      print('Error saving trainee to Firestore: $e');
     }
   }
 

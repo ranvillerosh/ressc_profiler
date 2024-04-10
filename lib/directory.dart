@@ -81,7 +81,9 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                   child: Image.asset("assets/media/training_icon.png"),
                 ),
                 title: Text("Add New Training"),
-                onTap: () {}, //TODO add new training
+                onTap: () {
+                  _addNewTrainingDialog();
+                },
               ),
             )
           ],
@@ -651,26 +653,24 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Future<void> _addNewTrainingDialog(Training newTraining) async {
+  Future<void> _addNewTrainingDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog (
-          title: Text('Add New Trainee Profile'),
+          title: const Text('Add New Training'),
           content: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  buildTrainingHeader(context, newTraining),
-                  buildTrainingBackground(newTraining),
-                  buildTrainingRationale(newTraining),
-                  ListTile(
-                    title: Text("Objectives"),
-                    subtitle: buildTrainingObjectives(newTraining),
-                  ),
+                  buildTrainingHeader(),
+                  buildTrainingName(),
+                  buildTrainingBackground(),
+                  buildTrainingRationale(),
+                  buildTrainingObjectives()
                 ],
               ),
             ),
@@ -679,7 +679,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             Card(
               child: InkWell(
                 onTap: () {
-                  //TODO add training chooser
+                  //TODO add Training Batch Details
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(5.0),
@@ -687,7 +687,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.add_circle_sharp),
-                      Text("Add Training(s)")
+                      Text("Add Batch Record(s)")
                     ],
                   ),
                 ),
@@ -702,8 +702,8 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
             ),
             OutlinedButton(
                 onPressed: () async {
-                  newTraineeProfile.id = await GlobalData.db.collection("trainee").doc().id;
-                  newTraineeProfile.saveToFirestore().whenComplete(() =>
+                  newTraining.id = await GlobalData.db.collection("training").doc().id;
+                  newTraining.saveToFirestore().whenComplete(() =>
                       Navigator.of(context).pop()
                   );
                 },
@@ -714,7 +714,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Widget buildTrainingHeader(BuildContext context, Training training){
+  Widget buildTrainingHeader(){
     return StatefulBuilder(
         builder:(BuildContext context, StateSetter setState) {
         return Container(
@@ -735,7 +735,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               ),
               Align(
                 alignment: FractionalOffset.bottomCenter,
-                child: buildTrainingLogo(training.logoURL),
+                child: buildTrainingLogo(newTraining.logoURL),
               ),
             ],
           ),
@@ -744,7 +744,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Widget buildTrainingName (Training training) {
+  Widget buildTrainingName () {
     return  StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return Column(
@@ -834,68 +834,57 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     }
   }
 
-  Widget buildTrainingRationale(Training training) {
-    var rationale = "No training rationale set.";
-    if (training.rationale != null) {
-      rationale = training.rationale!;
-    }
-
-    return ListTile(
-      title: const Text("Rationale"),
-      subtitle: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Text(rationale),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTrainingBackground(Training training) {
-    var background = "No training background set.";
-    if (training.background != null) {
-      background = training.background!;
-    }
-
-    return ListTile(
-      title: const Text("Background"),
-      subtitle: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Text(background),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTrainingObjectives(Training training) {
-
-    if (training.objectives != null && training.objectives!.isNotEmpty) {
-      return Expanded(
-        child: ListView.builder(
-          itemCount: training.objectives!.length,
-          itemBuilder: (context, index) {
-            return Expanded(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text(training.objectives![index]),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      return const Expanded(
-          child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text("No objectives set."),
+  Widget buildTrainingRationale() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return TextFormField(
+            decoration: InputDecoration(
+              labelText: "Rationale",
+              hintText: "Enter Training Rationale here",
             ),
-          )
-      );
+            onChanged: (String? newValue){
+              setState(() {
+                newTraining.rationale = newValue.toString();
+              });
+            },
+          );
+        }
+    );
+  }
 
-    }
+  Widget buildTrainingBackground() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return TextFormField(
+            decoration: InputDecoration(
+              labelText: "Background",
+              hintText: "Enter Training Background here",
+            ),
+            onChanged: (String? newValue){
+              setState(() {
+                newTraining.background = newValue.toString();
+              });
+            },
+          );
+        }
+    );
+  }
+
+  Widget buildTrainingObjectives() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return TextFormField(
+            decoration: InputDecoration(
+              labelText: "Objectives",
+              hintText: "Enter Training Objective(s) here",
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+                newTraining.objectives?.add(newValue.toString());
+              });
+            },
+          );
+        }
+    );
   }
 }
