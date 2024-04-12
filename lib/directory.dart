@@ -687,7 +687,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.add_circle_sharp),
-                      Text("Add Batch Record(s)")
+                      Text("Add Training Batch Record(s)")
                     ],
                   ),
                 ),
@@ -744,7 +744,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
     );
   }
 
-  Widget buildTrainingName () {
+  Widget buildTrainingName() {
     return  StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return Column(
