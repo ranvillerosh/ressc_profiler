@@ -298,6 +298,7 @@ class _RESSCDirectory extends State<RESSCDirectory> with TickerProviderStateMixi
               child: InkWell(
                 onTap: () {
                   //TODO add training chooser
+
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(5.0),
